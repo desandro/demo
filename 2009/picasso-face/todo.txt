@@ -1,0 +1,18 @@
+* if a branch has a specified class name, set it as open by default
+	add inpath classes appropriately
+
+will it work if you have
+
+child UL have to be direct descent childs of their parent LI
+
+plugin
+	options
+		colW
+		height of container
+		animation optional
+		.branch:hover displays optional
+		scrollLeft optional
+		add "back button" option
+		add neutral space for ul's always can be clicked  option
+		
+	

@@ -1,0 +1,1 @@
+Picasso Face was an attempt to replicate Mac OS X's Finder columns view in the browser with jQuery.

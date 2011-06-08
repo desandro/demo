@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Warriors 09</title>
+
+	<link rel="stylesheet" type="text/css" media="screen" href="css/yui_reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/warriors01.css" />
+
+	<style type="text/css" media="screen">
+		.picasso_face {
+			background: hsla(240,100%,50%,.1);
+
+			overflow-y: hidden;
+			height: 90px;
+			/* */	overflow-x: scroll; /* */
+		/* * /	width: 800px;   /* */
+			margin-bottom: 40px;
+		}
+		
+		.pface_x_wrap {
+			overflow-x:hidden;
+			background: hsla(120,50%,20%,.1);
+			height: 100%;
+			position: relative;
+		}
+		
+		.picasso_face .column {
+			width: 240px;
+			float: left;
+			position: absolute;
+			height: 75px;
+			background: hsla(60,50%,20%,.1);
+
+		}
+		
+
+		
+		.picasso_face .column ul {
+			padding: 0;
+			width: 240px;
+			margin: 0;
+			position: absolute;
+			height: 100%;
+		/* */	overflow: auto;  /* */
+			top: 0;
+			background: hsla(0,0%,100%,.8);
+		}
+
+		.picasso_face .column ul.active{
+			background: hsla(60,100%,80%,.8);
+		}
+
+		.picasso_face .column li {
+			list-style: none;
+		}
+		
+		.picasso_face .column li.branch.inpath {
+			background: #222;
+			color: #FFF;
+		}
+		
+		.picasso_face .column li:hover {
+			background: hsla(60,100%,50%,.5);
+			cursor: pointer;
+		}
+	</style>
+
+	<script type="text/javascript" src="js/jquery-1.3.2.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/jquery.easing.1.3.js" charset="utf-8"></script>
+
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+		    function debug(){
+		      window.console && console.log.call(console,arguments)
+		    }
+
+			
+			var colW = 240;
+			
+			$('#warriors').each(function(){
+				var tree = [];
+				var maxLevel = 0;
+				
+				$(this).find('.branch').each(function(){
+					var level = $(this).parents('.branch').length + 1;
+					$(this).addClass('level' + level);
+					maxLevel = Math.max( maxLevel, level );
+
+					var clonedBranch = $(this).children('ul').clone();
+					clonedBranch.find('.branch ul').remove();
+
+					if (tree[level] == undefined ) tree[level] = [];
+					tree[level].push( clonedBranch );					
+				});
+
+				var topMenu = $(this).clone().removeAttr('id');
+				topMenu.find('.branch ul').remove();
+				tree[0] = topMenu;
+
+				var pFace = $('<div class="picasso_face" />');
+
+				var xWrap = $('<div class="pface_x_wrap" />');
+				pFace.append( xWrap );
+
+				//	debug('colW: ' + colW);
+				
+				for( i = 0; i <= maxLevel; i++ ) {
+					var column = $('<div class="column col' + i + '" />');
+					var colX = Math.max( 0, colW * (i-1) );
+					column.css({ 
+						zIndex: (maxLevel-i)*100 + 100,
+						left: colX
+					});
+					
+				//	debug(i );
+					for (j = 0; j < tree[i].length; j++ ) {
+						column.append( tree[i][j] );
+					}
+
+					column.appendTo( xWrap );
+				}
+				
+				$(this).before( pFace );
+				
+				pFace.find('.column:gt(0)').children().hide();
+				pFace.find('.column:eq(0) ul').addClass('active');
+			
+				xWrap.css('width', colW * 2)
+			});
+			
+
+			/**/
+			$('.picasso_face .column ul.active  li').live('mouseover', function(){
+				var pFace = $(this).parents('.picasso_face');
+				var thisColumn = $(this).parents('.column');
+
+				var allCols = pFace.find('.column');
+				
+				var level = allCols.index( thisColumn );
+				var branchIdx = thisColumn.find('.branch ').index(this);
+				
+				//debug('level: ' + level, 'id: ' + branchIdx );
+				//debug( this );
+
+				
+				var nextCol = allCols.eq( level + 1);
+				var assocBranch = nextCol.children().eq(branchIdx);
+
+				//show next column
+				nextCol.show();
+
+				// hide ul's in the next column that are not the one we want to open
+				nextCol.children().not(':eq('+branchIdx+')')
+					.stop().animate({left: 0}, 'slow', 'easeOutQuint', 
+					function() { $(this).hide(); });
+				
+				
+				// slide open the appropriate ul in the next column
+				assocBranch.stop().show().animate({left: colW}, 'slow', 'easeOutQuint');
+				
+				
+			});
+			/**/
+			
+
+			var branchClick = false;
+			var branchIdx;
+
+			$('.picasso_face .column .branch').bind('click',function(){
+				
+				var thisColumn = $(this).parents('.column');
+				branchIdx = thisColumn.find('.branch ').index(this);
+				
+				branchClick = true;
+				
+			});
+
+			
+			$('.picasso_face .column > ul').bind('click', function(){
+				var pFace = $(this).parents('.picasso_face');
+				var thisColumn = $(this).parents('.column');
+				var xWrap = pFace.children();
+
+				var allCols = pFace.find('.column');
+
+				var level = allCols.index( thisColumn );
+				var ulIdx = thisColumn.children('ul').index(this);
+
+				var nextCol = allCols.eq( level + 1);
+				
+				debug('level: ' + level, 'ulIdx: ' + ulIdx, 'branchClick: '  + branchClick);
+				
+				var closeableDrawers = pFace.find('.column:gt('+level+')').children();
+				
+				// remove active class so we can appropriately add it.
+				$('.picasso_face ul.active').removeClass('active');
+
+				// remove inPath
+				pFace.find('.column:gt('+level+')').find('.inpath').removeClass('inpath');
+				thisColumn.find('.inpath').removeClass('inpath');
+				
+				
+				var xWrapPlus = 1;
+				
+				if (branchClick) { 
+
+					// show next column
+					nextCol.show();
+					
+					// slide out associated branch
+					var assocBranch = nextCol.children().eq(branchIdx);
+					assocBranch.stop()
+						.show().addClass('active')
+						.animate({left: colW}, 'slow', 'easeOutQuint');
+					
+					//	refine closeableDrawers to all of them except for the one
+					//		we want to slide out
+					closeableDrawers = closeableDrawers.not(':eq('+branchIdx+')');
+					
+					
+					// add .inpath to the branch that was clicked
+					thisColumn.find('.branch:eq('+branchIdx+')').addClass('inpath');
+					
+					//debug('branchIdx: ' + branchIdx);
+					
+					xWrapPlus++;
+					// if assocBranch has child branches
+					if ( assocBranch.find('.branch').length != 0 ) { xWrapPlus++; }
+
+					
+				} else {
+					$(this).addClass('active');
+					
+					// if this ul has child branches
+					if ( $(this).find('.branch').length != 0 ) { xWrapPlus++; }
+					
+				}
+			
+				closeableDrawers.not(':hidden').stop()
+					.each(function(){
+						var cLevel = allCols.index(  $(this).parents('.column')  );
+						var posX = ( 1 + level - cLevel) * colW;
+						$(this).animate({left: posX}, 'slow', 'easeOutQuint', 
+							function() { 
+								$(this).css('left', 0).hide(); 
+								if (!branchClick) {
+								//	$(this).parents('.column').hide();
+									debug('no BranchClick');
+								}
+							});
+					})
+				;
+
+				var xWrapW = colW * (level+xWrapPlus);
+				var pFaceW = pFace.width();
+
+				
+				xWrap.animate({
+					width:  xWrapW,
+					}, 'slow', 'easeOutQuint');
+
+				if (xWrapW > pFaceW ) {
+					debug('scrolltrigger');
+					//xWrap.animate({scrollLeft:20}, 'slow', 'easeOutQuint');
+					pFace.animate({scrollLeft:xWrapW-pFaceW}, 'slow', 'easeOutQuint');
+				}
+				
+
+				if (level > 0) {
+					allCols.eq((level-1)).find('.branch').eq(ulIdx).addClass('inpath');
+				}
+
+			
+				// reset branchClick
+				branchClick = false;
+			});
+			
+		});
+	</script>
+
+
+</head>
+<body>
+	<h1>Warriors 09</h1>
+	
+	
+	<ul id="warriors">
+		<li class="branch">Plot
+			<ul>
+				<li class="branch">Beginning
+					<ul>
+						<li class="branch">Cyrus midnight&#8217;s summit
+							<ul>
+								<li>Cyrus, the leader of the most powerful gang in New York City, the Gramercy Riffs, calls a midnight summit for all the area gangs, with all asked to send nine unarmed representatives for the conclave in Pelham Bay Park. The Warriors, from Coney Island, Brooklyn, are one such gang.</li>
+							</ul>
+						</li>
+						<li class="branch">Cryus murdered
+							<ul>
+								<li>The eloquent and intelligent Cyrus (Roger Hill) tells the assembled crowd that a permanent citywide truce would allow the gangs to control the city, pointing out there are 60,000 of them and only 20,000 officers in the NYPD. Most of the gangs laud his idea, but members of The Rogues gang, who have smuggled a gun in, pass it to Luther, who then kills Cyrus. Panic ensues. Luther (David Patrick Kelly), leader of the Rogues, is seen in the act by one of the Warriors, Fox (Thomas G. Waites). Immediately after, the NYPD rushes in from all sides. During the chaos, Luther screams that the Warriors are responsible for killing Cyrus. While the Riffs beat the Warriors' leader Cleon (Dorsey Wright), the other eight Warriors escape the melee and debate their next move, knowing they are deep in enemy territory.</li>
+							</ul>
+						</li>
+						<li>Splitting up</li>
+					</ul>
+				</li>
+				<li class="branch">Middle
+					<ul>
+						<li>Warriors framed</li>
+						<li>Subway</li>
+					</ul>
+				</li>
+				<li>End</li>
+			</ul>
+		</li>
+		<li class="branch">Cast and characters
+			<ul>
+				<li class="branch">The Warriors
+					<ul>
+						<li class="branch">Cleon
+							<ul>
+								<li>Leader of the Warriors</li>
+								<li>Attacked by the Riffs</li>
+								<li>Played by Dorsey Wright in the film</li>
+							</ul>
+						</li>
+						<li class="branch">Swan
+							<ul>
+								<li>Great head of hair</li>
+								<li>Warriors second-in command</li>
+								<li>Played by Michael Beck in the film</li>
+							</ul>
+						</li>
+						<li class="branch">Ajax
+							<ul>
+								<li>The hot head</li>
+								<li>Played by James Remar in the film</li>
+							</ul>
+						</li>
+						<li>Vermin</li>
+						<li>Cochise</li>
+						<li>Fox</li>
+						<li>Rembrandt</li>
+						<li>Snow</li>
+						<li>Cowboy</li>
+					</ul>
+				</li>
+				<li class="branch">Other notable gangs
+					<ul>
+						<li>The Turnbull AC&#8217;s</li>
+						<li>The Orphans</li>
+						<li>The Baseball Furies</li>
+						<li>The Lizzies</li>
+						<li>The Punks</li>
+						<li>The Rogues</li>
+						<li>The Gramercy Riffs</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>Production</li>
+		<li class="branch">Reception
+			<ul>
+				<li>Reviews</li>
+				<li>Legacy</li>
+			</ul>
+		</li>
+		<!-- -->
+		<li class="branch">Merchandise
+			<ul>
+				<li>Novel (original incarnation)</li>
+				<li><em>The Warriors</em> 2005 video game</li>
+				<li class="branch">Action figures
+					<ul>
+						<li>Swan</li>
+						<li>Cleon</li>
+						<li>Cochise</li>
+						<li>Ajax</li>
+						<li>Luther</li>
+						<li>Baseball Fury</li>
+					</ul>
+				</li>
+				<li><em>The Warriors: Street Brawl</em> downloadable game</li>
+				<li><em>The Warriors: Jail Break</em> comic book series</li>
+			</ul>
+		</li>
+		<li class="branch">Remake
+			<ul>
+				<li>
+					<p>A modern-day remake of the film is set to be directed by Tony Scott, with a tentative release date of 2010.</p>
+				</li>
+			</ul>
+		</li>
+	<!--	-->
+	</ul>
+
+
+
+
+	
+
+</body>
+</html>
