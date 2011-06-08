@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+	<title>jquery keys2</title>
+
+    <style type="text/css" media="screen">
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+    </style>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function(){
+        $(document).keydown(function(e){
+            var code = (e.keyCode ? e.keyCode : e.which);
+            $('#tester').text(code);
+        });
+        
+    });
+    
+
+</script>
+
+</head>
+<body>
+    <h1>jquery keys 2</h1>
+
+    <p id="tester">tester</p>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #EEE;
+}
+
+
+#keyboard {font-size: 14px;}
+
+#keyboard li,
+#keyboard,
+#keyboard ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#keyboard .key {
+    height: 2.5em;
+    line-height: 2.5em;
+    width: 2.5em;
+    text-align: center;
+    border: 1px solid white;
+    float: left;
+    background-color: white;
+    background-image: -moz-linear-gradient(-90deg, hsla(0,0%,0%,.05), transparent 70%, transparent);
+    background-image: -webkit-gradient(linear, 0 top, 0 bottom, from( hsla(0,0%,0%,.05) ),
+        color-stop(70%, transparent), to(transparent) );
+    overflow: hidden;
+    margin: 0.22em;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 2px 2px hsla(0,0%,0%,.1);
+       -moz-box-shadow: 0 2px 2px hsla(0,0%,0%,.1);
+            box-shadow: 0 2px 2px hsla(0,0%,0%,.1);
+                    
+
+}
+
+#keyboard .key.keydown {
+    border-color: #777;
+    background-color: #AAA;
+    -webkit-box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8);
+       -moz-box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8);
+            box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8);
+}
+
+#keyboard .key:hover {
+    -webkit-box-shadow: 0 2px 2px hsla(0,0%,0%,.1), 0 0 10px hsla(220,100%,50%,.7);
+       -moz-box-shadow: 0 2px 2px hsla(0,0%,0%,.1), 0 0 10px hsla(220,100%,50%,.7);
+            box-shadow: 0 2px 2px hsla(0,0%,0%,.1), 0 0 10px hsla(220,100%,50%,.7);
+}
+
+#keyboard .key.keydown:hover {
+    -webkit-box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8), 0 0 10px hsla(220,100%,50%,.7);
+       -moz-box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8), 0 0 10px hsla(220,100%,50%,.7);
+            box-shadow: inset 0 2px 8px hsla(0,0%,0%,.8), 0 0 10px hsla(220,100%,50%,.7);
+
+}
+
+#keyboard .row { clear: both; }
+
+#keyboard .row:after {
+    display: block;
+    clear: both;
+    content: '';
+    height: 0;
+}
+
+#keyboard .backspace { width: 4em; }
+#keyboard .tab { width: 4em; }
+
+#keyboard .f12, #keyboard .f15,
+#keyboard .backspace, #keyboard .backslash,
+#keyboard .pageup, #keyboard .pagedown,
+#keyboard .rctrl, #keyboard .right { margin-right: 2.0em; }
+
+#keyboard .esc { margin-right: 4.75em;}
+
+#keyboard .capslock { width: 4.5em; }
+#keyboard .row3 .enter { width: 5.0em; margin-right: 13.1em; }
+#keyboard .shift { width: 6.25em; }
+
+#keyboard .ctrl,
+#keyboard .cmd { width: 4.0em; }
+#keyboard .alt { width: 3.5em; }
+#keyboard .space { width: 17.5em; }
+
+
+#keyboard .rshift, #keyboard .up { margin-right: 5.125em; }
+
+#keyboard .numpadenter { height: 5.67em; line-height: 5.67em; margin-bottom: -3.0em; }
+
+#keyboard .numpad0 { width: 5.67em; }
