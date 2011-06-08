@@ -9,6 +9,8 @@
 
 Options +Indexes
 
+IndexIgnore .*
+
 IndexOptions FancyIndexing
 IndexOptions FoldersFirst IgnoreCase XHTML NameWidth=*
 IndexOptions SuppressHTMLPreamble SuppressRules HTMLTable
