@@ -51,7 +51,6 @@
     this.offsetX = 0;
     this.offsetY = 0;
     
-    // console.log( this.origin.x, this.origin.y );
   }
   
   UndulateNode.prototype.elasticizeProperty = function ( prop, target ) {
@@ -144,10 +143,7 @@
     this.width = this.canvas.width = window.innerWidth;
     this.height = this.canvas.height = window.innerHeight;
     
-    // this.spacing = ( this.width * ( this.height * HALF_ROOT_3 ) ) / this.density;
-    
     this.spacing = Math.sqrt( ( this.width * this.height ) / ( this.nodeCount * HALF_ROOT_3 ) );
-    // this.spacing = Math.ceil( this.spacing );
     
     this.nodes = [];
     
@@ -156,8 +152,6 @@
     
     var nodeCount = this.cols * this.rows;
     
-    console.log( nodeCount )
-
     var xAdjust = ( ( this.width % this.spacing ) - this.spacing / 2 ) / 2,
         yAdjust = ( this.height % ( this.spacing * HALF_ROOT_3 ) ) / 2,
         origin,
