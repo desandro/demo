@@ -89,10 +89,38 @@
   
   UndulateNode.prototype.render = function() {
     var ctx = this.parent.context;
+    // ctx.lineWidth = 5;
+
+    // node on right
+    this.renderLineToNode( this.parent.nodes[ this.row ][ this.col + 1 ] );
+
+    var nextNodeRow = this.parent.nodes[ this.row + 1 ],
+        colShiftA = this.row % 2 ? 0 : -1,
+        colShiftB = this.row % 2 ? 1 : 0;
+    if ( nextNodeRow ) {
+      this.renderLineToNode( nextNodeRow[ this.col + colShiftA ] );
+      this.renderLineToNode( nextNodeRow[ this.col + colShiftB ] );
+    }
+    
+    // ctx.fillStyle = 'white';
+    // ctx.beginPath();
+    // ctx.arc( this.x, this.y, 6, 0, Math.PI*2 );
+    // ctx.fill();
+    
+  };
+  
+  UndulateNode.prototype.renderLineToNode = function( node ) {
+    // don't proceed if no node
+    if ( !node ) {
+      return;
+    }
+    
+    var ctx = this.parent.context;
     ctx.beginPath();
-    ctx.arc( this.x, this.y, 5, 0, Math.PI*2 );
-    ctx.fill();
-    ctx.closePath();
+    ctx.moveTo( this.x, this.y );
+    ctx.lineTo( node.x, node.y )
+    ctx.stroke();
+    
   };
   
   
@@ -116,19 +144,30 @@
     this.width = this.canvas.width = window.innerWidth;
     this.height = this.canvas.height = window.innerHeight;
     
+    // this.spacing = ( this.width * ( this.height * HALF_ROOT_3 ) ) / this.density;
+    
+    this.spacing = Math.sqrt( ( this.width * this.height ) / ( this.nodeCount * HALF_ROOT_3 ) );
+    // this.spacing = Math.ceil( this.spacing );
+    
     this.nodes = [];
     
     this.cols = Math.ceil( this.width / this.spacing );
     this.rows = Math.ceil( this.height / ( this.spacing * HALF_ROOT_3 ) );
+    
+    var nodeCount = this.cols * this.rows;
+    
+    console.log( nodeCount )
 
     var xAdjust = ( ( this.width % this.spacing ) - this.spacing / 2 ) / 2,
         yAdjust = ( this.height % ( this.spacing * HALF_ROOT_3 ) ) / 2,
         origin,
-        y, x, row, col, rowAdjust, node;
+        y, x, row, col, rowAdjust, node,
+        rowNodes;
     
     var ctx = this.context;
     
     for ( row = 0; row < this.rows; row++ ) {
+      this.nodes[row] = [];
       y = row * this.spacing * HALF_ROOT_3 + yAdjust;
       for ( col = 0; col < this.cols; col++ ) {
         rowAdjust = (row % 2) * 0.5;
@@ -143,12 +182,7 @@
           'col' : col
         });
         
-        // console.log( origin.x, origin.y )
-        this.nodes.push( node );
-        
-        ctx.beginPath();
-        ctx.arc( node.originX, node.originY, 10, 0, Math.PI*2 );
-        ctx.fill();
+        this.nodes[row].push( node );
       }
     }
     
@@ -163,19 +197,22 @@
   UndulateNet.prototype.animate = function() {
     
     var ctx = this.context,
-        node;
+        node, row, col;
     
     ctx.clearRect( 0, 0, this.width, this.height );
-    
-    var node;
-    for ( var i=0, len = this.nodes.length; i < len; i++) {
-      node = this.nodes[i];
-      node.update();
+
+    for ( row = 0; row < this.rows; row++ ) {
+      for ( col = 0; col < this.cols; col++ ) {
+        node = this.nodes[row][col];
+        node.update();
+      }
     }
-    
-    for ( i=0; i < len; i++ ) {
-      node = this.nodes[i];
-      node.render();
+
+    for ( row = 0; row < this.rows; row++ ) {
+      for ( col = 0; col < this.cols; col++ ) {
+        node = this.nodes[row][col];
+        node.render();
+      }
     }
     
     var instance = this;
@@ -241,11 +278,11 @@
     var canvasElem = document.getElementById('canvas');
     new UndulateNet({
       canvas: canvasElem,
-      spacing: 35,
+      nodeCount: 600, // an approximate figure
       elasticity: 0.93,
-      responsiveness: 0.07,
-      displacementRadius: 220,
-      displacementIntensity: 0.75
+      responsiveness: 0.1,
+      displacementRadius: 300,
+      displacementIntensity: 1
     });
   }
   
