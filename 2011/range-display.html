@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>range-display</title>
+
+  <style media="screen">
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>range-display</h1>
+  
+  <p>
+    <input type="text" />
+  </p>
+  <p>
+    <label for="origin-x">origin-x</label>
+    <input id="origin-x" type="range" min="0" max="100" value="50" data-units="%" />
+  </p>
+  <p>
+    <label for="origin-y">origin-y</label>
+    <input id="origin-y" type="range" min="0" max="100" value="50" data-units="%" />
+  </p>
+  <p>
+    <label for="intensity">intensity</label>
+    <input id="intensity" type="range" min="-1" max="1" value="0.5" step="0.01" />
+  </p>
+  
+<script>
+(function(){
+  
+  /* ==================== EventHandler ==================== */
+
+  function EventHandler() {}
+
+  EventHandler.prototype.handleEvent = function( event ) {
+    if ( this[event.type] ) {
+      this[event.type](event);
+    }
+  };
+  
+  /* ==================== RangeDisplay ==================== */
+
+  // displays the value of a range input
+  // why isn't this in the HTML5 spec?
+
+  function RangeDisplay( range ) {
+    this.range = range;
+    this.output = document.createElement('span');
+    this.output.className = 'range-display';
+
+
+    this.units = this.range.getAttribute('data-units') || '';
+
+    this.range.parentNode.appendChild( this.output );
+
+    this.range.addEventListener( 'change', this, false);
+    
+    // trigger change to set text
+    this.change();
+    
+  }
+
+  RangeDisplay.prototype = new EventHandler();
+
+  RangeDisplay.prototype.change = function( event ) {
+    this.output.textContent = this.range.value + this.units;
+  };
+  
+  
+  /* ==================== init ==================== */
+  
+  function init() {
+    
+    var inputs = document.getElementsByTagName('input'),
+        input;
+    for (var i=0, len = inputs.length; i < len; i++) {
+      input = inputs[i];
+      if ( input.type === 'range' ) {
+        new RangeDisplay( input );
+      }
+    }
+    
+  }
+  
+  window.addEventListener( 'load', init, false );
+  
+  
+})();
+</script>
+
+</body>
+</html>
