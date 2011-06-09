@@ -1,0 +1,376 @@
+/* Copyright (c) 2009, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.net/yui/license.txt version: 2.8.0r4 */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
+
+/**************************
+**  Pointers
+**************************/
+
+span.pointer {
+    display: block;
+    position: absolute;
+    border-style: solid;
+    line-height: 0;
+}
+
+/**************************min
+**  Real stuff
+**************************/
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    -webkit-transition: all 600ms ease-out;
+       -moz-transition: all 600ms ease-out;
+         -o-transition: all 600ms ease-out;
+            transition: all 600ms ease-out;
+}
+
+#wrap {
+    width: 720px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-weight: 100;
+    font-size: 50px;
+    margin: 0 10px;
+}
+
+/**************************
+**  Theme switcher
+**************************/
+
+.themes {
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.themes li, .themes ul { display: inline; }
+
+.themes li a {
+    padding: 2px 6px;
+    text-decoration: none;
+}
+
+.themes li a.light-theme { background: #FFF; color: #8C4; }
+.themes li a.light-theme:hover { color: #034; }
+.themes li a.cool-theme { background: #8C4; color: #034; }
+.themes li a.cool-theme:hover { color: #FFF; }
+.themes li a.dark-theme { background: #034; color: #FFF; }
+.themes li a.dark-theme:hover { color: #8C4; }
+
+/**************************
+**  Nav
+**************************/
+
+#nav {
+    margin: 10px;    
+    position: relative;
+    z-index: 400;
+    height: 26px;
+}
+
+#nav:after,
+#wrap:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#nav li {
+    padding: 0 30px 0 10px;
+    height: 26px;
+    line-height: 26px;
+    float: left;
+    border-right: 1px solid;
+    font-weight: bold;
+    position: relative;
+    z-index: 300;
+}
+
+
+
+#nav li ul { 
+    height: 0;
+    overflow: hidden;
+    width: 120px;
+    position: absolute;
+    left: 0;
+    top: 26px;
+    z-index: 200;
+    -webkit-transition: all 200ms ease-out;
+       -moz-transition: all 200ms ease-out;
+         -o-transition: all 200ms ease-out;
+            transition: all 200ms ease-out;
+}
+
+#nav li:hover ul { 
+    height: 240px; 
+    z-index: 200;
+}
+
+
+
+#nav li li {
+    font-weight: normal;
+    font-size: 13px;
+    width: 120px;
+}
+
+#nav li .pointer {
+    border-width: 5px;
+    border-bottom: none;
+    top: 11px;
+    right: 8px;
+}
+
+
+
+/**************************
+**  Accordion
+**************************/
+
+#accordion {
+    width: 220px;
+    margin: 0 10px 20px;
+    height: 340px;
+    float: left;
+    clear: both;
+    position: relative;
+    border-top: 1px solid;
+    
+}
+
+#accordion li {
+    border-bottom: 1px solid;
+    padding-left: 20px;
+    position: relative;
+    font-weight: bold;
+    
+}
+
+#accordion ul {
+    height: 0;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: all 200ms ease-out;
+       -moz-transition: all 200ms ease-out;
+         -o-transition: all 200ms ease-out;
+            transition: all 200ms ease-out;
+}
+
+#accordion li:hover ul {
+    height: 180px;
+}
+
+#accordion li li {
+    border: none;
+    font-size: 13px;
+    padding-left: 0;
+    font-weight: normal;
+}
+
+#accordion li .pointer {
+    border-width: 5px;
+    top: 6px;
+    left: 5px;
+    border-right: 0;
+    -webkit-transition: all 200ms ease-out;
+       -moz-transition: all 200ms ease-out;
+         -o-transition: all 200ms ease-out;
+            transition: all 200ms ease-out;
+}
+
+
+
+#accordion li:hover .pointer {
+    -webkit-transform: rotate(90deg);
+       -moz-transform: rotate(90deg);
+         -o-transform: rotate(90deg);
+            transform: rotate(90deg);
+}
+
+/**************************
+**  Cycle
+**************************/
+
+#cycle {
+    width: 460px;
+    margin: 0 10px 20px;
+    float: left;
+}
+
+
+#cycle ol {
+    position: relative;
+    width: 460px;
+    height: 260px;
+    overflow: hidden;
+}
+
+#cycle ol > li {
+    padding: 30px;
+    font-size: 60px;
+    line-height: 0.8em;
+    font-weight: 600;
+    height: 200px;
+    width: 400px;
+    position: absolute;
+    left: 460px;
+    top: 0;
+    opacity: 0;
+    -webkit-transition: all 600ms ease-out;
+       -moz-transition: all 600ms ease-out;
+         -o-transition: all 600ms ease-out;
+            transition: all 600ms ease-out;
+}
+
+#cycle li.selected {
+    opacity: 1.0;
+    left: 0;
+}
+
+#cycle li {
+}
+
+#cycle li ul {
+    line-height: 18px;;
+}
+
+#cycle li ul li { 
+    background: none;
+    padding: 0;
+    display: inline;
+    font-weight: 100;
+    font-size: 24px;
+    height: auto;
+    margin: 0;
+    width: auto;
+}
+
+#cycle li li:after {
+    content: ' / ';
+    
+}
+
+#cycle .slide-nav { margin-top: 5px;}
+
+#cycle .slide-nav a {
+    display: block;
+    float: left;
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    text-indent: -9999px;
+    position: relative;
+    outline: none;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+}
+
+#cycle .slide-nav a .pointer {
+    top: 5px;
+    border-width: 5px;
+}
+#cycle .slide-nav a.prev .pointer { 
+    left: 7px;
+    border-left: none; 
+}
+#cycle .slide-nav a.next .pointer { 
+    left: 8px;
+    border-right: none; 
+}
+
+/**************************
+**  Themes
+**************************/
+
+
+/**** Light ****/
+.light { background: #FFF; color: #8C4; }
+
+.light #nav { background: #8C4; }
+.light #nav li { background: #8C4; border-color: #FFF; color: #FFF; }
+.light #nav li:hover { background: #034; }
+.light #nav li .pointer { border-color: #FFF #8C4; }
+.light #nav li:hover .pointer { border-color: #FFF #034; }
+.light #nav li li { background: #034; }
+
+
+.light #accordion li { border-color: #8C4; }
+.light #accordion li:hover { color: #034; }
+.light #accordion li .pointer { border-color: #FFF #8C4; }
+.light #accordion li:hover .pointer { border-color: #FFF #034; }
+.light #accordion li li { color: #034; }
+
+.light #cycle ol { background: #8C4; }
+.light #cycle li { background: #8C4; color: #034; }
+.light #cycle li ul li { background: none;  color: #FFF; }
+.light #cycle .slide-nav a { background: #034; }
+.light #cycle .slide-nav a .pointer { border-color: #034 #FFF; }
+.light #cycle .slide-nav a:hover { background: #8C4; }
+.light #cycle .slide-nav a:hover .pointer { border-color: #8C4 #FFF; }
+.light #cycle .slide-nav a:active { background: #FFF; }
+.light #cycle .slide-nav a:active .pointer { border-color: #FFF #8C4; }
+
+/**** Cool ****/
+.cool { background: #8C4; color: #034; }
+
+.cool #nav { background: #034; }
+.cool #nav li { background: #034; border-color: #8C4; color: #8C4; }
+.cool #nav li:hover { background: #FFF; }
+.cool #nav li .pointer { border-color: #8C4 #034; }
+.cool #nav li:hover .pointer { border-color: #8C4 #FFF; }
+.cool #nav li li { background: #FFF; }
+
+
+.cool #accordion li { border-color: #034; }
+.cool #accordion li:hover { color: #FFF; }
+.cool #accordion li .pointer { border-color: #8C4 #034; }
+.cool #accordion li:hover .pointer { border-color: #8C4 #FFF; }
+.cool #accordion li li { color: #FFF; }
+
+.cool #cycle ol { background: #034; }
+.cool #cycle li { background: #034; color: #FFF; }
+.cool #cycle li ul li { background: none;  color: #8C4; }
+.cool #cycle .slide-nav a { background: #FFF; }
+.cool #cycle .slide-nav a .pointer { border-color: #FFF #8C4; }
+.cool #cycle .slide-nav a:hover { background: #034; }
+.cool #cycle .slide-nav a:hover .pointer { border-color: #034 #8C4; }
+.cool #cycle .slide-nav a:active { background: #8C4; }
+.cool #cycle .slide-nav a:active .pointer { border-color: #8C4 #034; }
+
+/**** Dark ****/
+.dark { background: #034; color: #FFF; }
+
+.dark #nav { background: #FFF; }
+.dark #nav li { background: #FFF; border-color: #034; color: #034; }
+.dark #nav li:hover { background: #8C4; }
+.dark #nav li .pointer { border-color: #034 #FFF; }
+.dark #nav li:hover .pointer { border-color: #034 #8C4; }
+.dark #nav li li { background: #8C4; }
+
+
+.dark #accordion li { border-color: #FFF; }
+.dark #accordion li:hover { color: #8C4; }
+.dark #accordion li .pointer { border-color: #034 #FFF; }
+.dark #accordion li:hover .pointer { border-color: #034 #8C4; }
+.dark #accordion li li { color: #8C4; }
+
+.dark #cycle ol { background: #FFF; }
+.dark #cycle li { background: #FFF; color: #8C4; }
+.dark #cycle li ul li { background: none; color: #034; }
+.dark #cycle .slide-nav a { background: #8C4; }
+.dark #cycle .slide-nav a .pointer { border-color: #8C4 #034; }
+.dark #cycle .slide-nav a:hover { background: #FFF; }
+.dark #cycle .slide-nav a:hover .pointer { border-color: #FFF #034; }
+.dark #cycle .slide-nav a:active { background: #034; }
+.dark #cycle .slide-nav a:active .pointer { border-color: #034 #FFF; }

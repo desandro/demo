@@ -1,0 +1,70 @@
+
+An unfinished article for nclud.com talking about CSS shapes and transitions.
+
+
+---
+
+
+The 
+
+Beercamp has come and passed
+
+CSS shapes are
+
+Sure, these are pretty neat and easily tweetable. I liken them to contemporary art like this coathanger gorilla sculpture.  I've been looking to turn the corner and suss out some utility from these excercises in the medium. What sort of practical application can be used for CSS shapes
+
+As it turned out, I 
+
+While its fun to have something to geek out about, most of these excercises amount to just excercises of the medium. Now we need to turn the corner and start considering what sort of practical applications for CSS shapes that can be used in production.
+
+While converting a PSD to HTML, I found the perfect opportunity for some CSS shapes.  The scope of the project incorporated building multiple themes around the same layout. 
+
+Mr. Giron employed little pointer triangles in several places on his comp. These are the tiny triangles used to indicate direction. The comp had them for jQuery slider controls, and list-item bullets. Personally, I find the task of creating sprite maps a bit tedious, especially for minute imagery like the pointer arrows. Going in to Photoshop and cutting up cutting up the tin
+
+Replicating these triangles with CSS is no big deal. In fact, triangles with CSS is a long-lost ancient technique passed down to us from the forgotten Web 1.0 people of 2001. The concept is simple: you have an element with no width and height, but with a border. Angles are visible if you change the color of adjacent borders. 
+
+Mark-up wise, I like using nothin' but spans for CSS shapes. Spans have no semantic meaning, and since they're inline elements, they can be used inside every other element and still be valid.
+
+    <span class="pointer"></span>
+
+On to styling.  All pointer shapes require some default properties. Display: block since these are inline elements and we want to treat them as blocks.  Position: absolute so they can be placed perfectly inside their relatively-positioned parent. Line-height: 0 is for IE 6 & 7, which applies a minimum height to all elements equal to the default font-size.
+
+    span.pointer {
+        display: block;
+        position: absolute;
+        border-style: solid;
+        line-height: 0;
+    }
+
+And then specific pointers get styled differently.
+
+    #nav li .pointer {
+        border-color: #FFF #28C;
+        border-width: 5px;
+        border-bottom: none;
+        top: 11px;
+        left: 60px;
+    }
+    
+    #accordion li .pointer {
+        border-color: #FFF #28C;
+        border-width: 5px;
+        border-right: none;
+        top: 6px;
+        left: 5px;
+    }
+
+This is especially helpful for styling various interatcion states inside a elements. All states can be changed with CSS, no getting your hands dirty pushing pixels in PhotoShop.
+
+    #cycle .slide-nav a .pointer { border-color: #222 #FFF; }
+    #cycle .slide-nav a:hover .pointer { border-color: #28C #FFF; }
+    #cycle .slide-nav a:active .pointer { border-color: #FFF #28C; }
+
+In my demo, I've extended this concept further by applying themes with CSS.
+
+At this point, I want to emphasizing that I am not evangelizing the design-in-the-browser workflow. This technique is simply another tool you should have in your shed alongside the sliding doors (couldn't resist corny CSS pun, sorry).
+
+Perhaps the greatest benefit to using CSS shapes is how well they work with CSS transitions.
+
+
+

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Works of Plutarch Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+    
+    <!--[if IE 6]><style type="text/css" media="screen">
+        #accordion, #cycle { display: inline; }
+        #accordion li .pointer { left: -20px; }
+    </style><![endif]-->
+    <!--[if lte IE 7]><style type="text/css" media="screen">
+        #nav { display: inline-block; }
+    </style><![endif]-->
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function(){
+            
+            // style switcher
+            $('.themes a').click(function(){
+                $('body').removeClass('light dark cool')
+                    .addClass( $(this).attr('title') );
+                return false;
+            });
+
+            // cycle switcher
+            $('#cycle .slide-nav a').click(function(){
+                var 
+                    delta  = $(this).index() *2 -1,
+                    $selected = $('#cycle li.selected'),
+                    $children = $('#cycle ol > li'),
+                    currentI = $selected.index(),
+                    liCount = $children.length,
+                    selectedI = (currentI + delta) % liCount
+                ;
+                $selected.removeClass('selected');
+                $children.eq(selectedI).addClass('selected');
+                
+                return false;
+            });
+            
+        });
+    </script>
+
+</head>
+<body  class="light">
+
+<div id="wrap">
+    <div class="themes">
+        Change Theme:
+        <ul>
+            <li><a class="light-theme" href="#light" title="light">Light</a></li>
+            <li><a class="cool-theme" href="#cool" title="cool">Cool</a></li>
+            <li><a class="dark-theme" href="#dark" title="dark">Dark</a></li>
+        </ul>
+    </div>
+    
+    <h1>Works of Plutarch</h1>
+    <ol id="nav">
+        <li>A
+            <span class="pointer"></span>
+            <ul>
+                <li>Aemilius Paulus</li>
+                <li>Agesilaus </li>
+                <li>Agis </li>
+                <li>Alexander </li>
+                <li>Antony </li>
+                <li>Aratus </li>
+                <li>Aristides </li>
+                <li>Artaxerxes</li> 
+            </ul>
+        </li>
+        <li>C
+            <span class="pointer"></span>
+            <ul>
+                <li>Caesar </li>
+                <li>Caius Gracchus </li>
+                <li>Caius Marius </li>
+                <li>Camillus </li>
+                <li>Cato the Younger </li>
+                <li>Cicero </li>
+                <li>Cimon </li>
+                <li>Cleomenes </li>
+                <li>Coriolanus </li>
+                <li>Crassus </li>
+            </ul>
+        </li>
+        <li>
+            D &ndash; G
+            <span class="pointer"></span>
+            <ul>
+                <li>Demetrius </li>
+                <li>Demosthenes </li>
+                <li>Dion </li>
+                <li>Eumenes  </li>
+                <li>Fabius  </li>
+                <li>Flamininus  </li>
+                <li>Galba   </li>
+            </ul>
+        </li>
+        <li>L &ndash; O
+            <span class="pointer"></span>
+            <ul>
+                <li>Lucullus </li>
+                <li>Lycurgus </li>
+                <li>Lysander </li>
+                <li>Marcellus </li>
+                <li>Marcus Brutus </li>
+                <li>Marcus Cato </li>
+                <li>Nicias </li>
+                <li>Numa Pompilius </li>
+                <li>Otho </li>
+            </ul>
+        </li>
+        <li>P
+            <span class="pointer"></span>
+            <ul>
+                <li>Pelopidas </li>
+                <li>Pericles </li>
+                <li>Philopoemen </li>
+                <li>Phocion </li>
+                <li>Pompey </li>
+                <li>Poplicola </li>
+                <li>Pyrrhus </li>
+            </ul>
+        </li>
+        <li>R &ndash; S
+            <span class="pointer"></span>
+            <ul>
+                <li>Romulus </li>
+                <li>Sertorius </li>
+                <li>Solon </li>
+                <li>Sylla</li>
+            </ul>
+        </li>
+        <li>
+            T
+            <span class="pointer"></span>
+            <ul>
+                <li>Themistocles </li>
+                <li>Theseus </li>
+                <li>Tiberius Gracchus </li>
+                <li>Timoleon </li>
+            </ul>
+        </li>
+    </ol> <!-- #nav -->
+    
+    <ol id="accordion">
+        <li>A
+            <span class="pointer"></span>
+            <ul>
+                <li>Aemilius Paulus</li>
+                <li>Agesilaus </li>
+                <li>Agis </li>
+                <li>Alexander </li>
+                <li>Antony </li>
+                <li>Aratus </li>
+                <li>Aristides </li>
+                <li>Artaxerxes</li> 
+            </ul>
+        </li>
+        <li>C
+            <span class="pointer"></span>
+            <ul>
+                <li>Caesar </li>
+                <li>Caius Gracchus </li>
+                <li>Caius Marius </li>
+                <li>Camillus </li>
+                <li>Cato the Younger </li>
+                <li>Cicero </li>
+                <li>Cimon </li>
+                <li>Cleomenes </li>
+                <li>Coriolanus </li>
+                <li>Crassus </li>
+            </ul>
+        </li>
+        <li>
+            D &ndash; G
+            <span class="pointer"></span>
+            <ul>
+                <li>Demetrius </li>
+                <li>Demosthenes </li>
+                <li>Dion </li>
+                <li>Eumenes  </li>
+                <li>Fabius  </li>
+                <li>Flamininus  </li>
+                <li>Galba   </li>
+            </ul>
+        </li>
+        <li>L &ndash; O
+            <span class="pointer"></span>
+            <ul>
+                <li>Lucullus </li>
+                <li>Lycurgus </li>
+                <li>Lysander </li>
+                <li>Marcellus </li>
+                <li>Marcus Brutus </li>
+                <li>Marcus Cato </li>
+                <li>Nicias </li>
+                <li>Numa Pompilius </li>
+                <li>Otho </li>
+            </ul>
+        </li>
+        <li>P
+            <span class="pointer"></span>
+            <ul>
+                <li>Pelopidas </li>
+                <li>Pericles </li>
+                <li>Philopoemen </li>
+                <li>Phocion </li>
+                <li>Pompey </li>
+                <li>Poplicola </li>
+                <li>Pyrrhus </li>
+            </ul>
+        </li>
+        <li>R &ndash; S
+            <span class="pointer"></span>
+            <ul>
+                <li>Romulus </li>
+                <li>Sertorius </li>
+                <li>Solon </li>
+                <li>Sylla</li>
+            </ul>
+        </li>
+        <li>
+            T
+            <span class="pointer"></span>
+            <ul>
+                <li>Themistocles </li>
+                <li>Theseus </li>
+                <li>Tiberius Gracchus </li>
+                <li>Timoleon </li>
+            </ul>
+        </li>
+    </ol> <!-- #accordion -->
+    
+    <div id="cycle">
+        <ol>
+            <li class="selected">A
+                <ul>
+                    <li>Aemilius Paulus</li>
+                    <li>Agesilaus </li>
+                    <li>Agis </li>
+                    <li>Alexander </li>
+                    <li>Antony </li>
+                    <li>Aratus </li>
+                    <li>Aristides </li>
+                    <li>Artaxerxes</li> 
+                </ul>
+            </li>
+            <li>C
+                <ul>
+                    <li>Caesar </li>
+                    <li>Caius Gracchus </li>
+                    <li>Caius Marius </li>
+                    <li>Camillus </li>
+                    <li>Cato the Younger </li>
+                    <li>Cicero </li>
+                    <li>Cimon </li>
+                    <li>Cleomenes </li>
+                    <li>Coriolanus </li>
+                    <li>Crassus </li>
+                </ul>
+            </li>
+            <li>
+                D &ndash; G
+                <ul>
+                    <li>Demetrius </li>
+                    <li>Demosthenes </li>
+                    <li>Dion </li>
+                    <li>Eumenes  </li>
+                    <li>Fabius  </li>
+                    <li>Flamininus  </li>
+                    <li>Galba   </li>
+                </ul>
+            </li>
+            <li>L &ndash; O
+                <ul>
+                    <li>Lucullus </li>
+                    <li>Lycurgus </li>
+                    <li>Lysander </li>
+                    <li>Marcellus </li>
+                    <li>Marcus Brutus </li>
+                    <li>Marcus Cato </li>
+                    <li>Nicias </li>
+                    <li>Numa Pompilius </li>
+                    <li>Otho </li>
+                </ul>
+            </li>
+            <li>P
+                <ul>
+                    <li>Pelopidas </li>
+                    <li>Pericles </li>
+                    <li>Philopoemen </li>
+                    <li>Phocion </li>
+                    <li>Pompey </li>
+                    <li>Poplicola </li>
+                    <li>Pyrrhus </li>
+                </ul>
+            </li>
+            <li>R &ndash; S
+                <ul>
+                    <li>Romulus </li>
+                    <li>Sertorius </li>
+                    <li>Solon </li>
+                    <li>Sylla</li>
+                </ul>
+            </li>
+            <li>
+                T
+                <ul>
+                    <li>Themistocles </li>
+                    <li>Theseus </li>
+                    <li>Tiberius Gracchus </li>
+                    <li>Timoleon </li>
+                </ul>
+            </li>
+        </ol>
+        <p class="slide-nav">
+            <a class="prev" href="#previous"><span class="pointer"></span>Previous</a>
+            <a class="next" href="#next"><span class="pointer"></span>Next</a>
+        </p>
+    </div> <!-- #cycle -->
+    
+    
+</div><!-- #wrap -->
+
+</body>
+</html>
