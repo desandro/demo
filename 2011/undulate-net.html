@@ -45,19 +45,19 @@
   <ul>
     <li>
       <label for="elasticity">elasticity</label>
-      <input id="elasticity" type="range" min="0" max="100" value="84" data-units="%" />
+      <input id="elasticity" type="range" min="0" max="100" value="93" data-units="%" />
     </li>
     <li>
-      <label for="viscosity">viscosity</label>
-      <input id="viscosity" type="range" min="0" max="100" value="8" data-units="%" />
+      <label for="responsiveness">responsiveness</label>
+      <input id="responsiveness" type="range" min="0" max="100" value="8" data-units="%" />
     </li>
     <li>
       <label for="displacement-radius">displacement radius</label>
-      <input id="displacement-radius" type="range" min="0" max="1000" value="220" data-units="px" />
+      <input id="displacement-radius" type="range" min="0" max="1000" value="280" data-units="px" />
     </li>
     <li>
       <label for="displacement-intensity">displacement intensity</label>
-      <input id="displacement-intensity" type="range" min="-100" max="100" value="75" data-units="%" />
+      <input id="displacement-intensity" type="range" min="-100" max="100" value="-25" data-units="%" />
     </li>
     <li>
       <label for="node-count"># of nodes (approx.)</label>
@@ -150,7 +150,7 @@
   
   UndulateNode.prototype.elasticizeProperty = function ( prop, target ) {
     var deltaProp = prop + 'Delta';
-    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.parent.elasticity + (this[ prop ] - target) * this.parent.viscosity;
+    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.parent.elasticity + (this[ prop ] - target) * this.parent.responsiveness;
     this[ prop ] -= this[ deltaProp ];
   };
   
@@ -375,10 +375,10 @@
     var net = new UndulateNet({
       canvas: canvasElem,
       nodeCount: 600, // an approximate figure
-      elasticity: 0.84,
-      viscosity: 0.08,
-      displacementRadius: 220,
-      displacementIntensity: 1,
+      elasticity: 0.93,
+      responsiveness: 0.08,
+      displacementRadius: 300,
+      displacementIntensity: -0.25,
       isRenderingGrid: true,
       isRenderingDots: false
     });
@@ -398,8 +398,8 @@
       net.elasticity = parseInt( event.target.value, 10 ) / 100;
     }, false );
 
-    document.getElementById('viscosity').addEventListener( 'change', function( event ) {
-      net.viscosity = parseInt( event.target.value, 10 ) / 100;
+    document.getElementById('responsiveness').addEventListener( 'change', function( event ) {
+      net.responsiveness = parseInt( event.target.value, 10 ) / 100;
     }, false );
     
     document.getElementById('displacement-radius').addEventListener( 'change', function( event ) {
