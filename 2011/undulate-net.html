@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>undulate net</title>
+
+  <style media="screen">
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+(function(){
+  
+  var HALF_ROOT_3 = Math.sqrt(3) / 2,
+      isTouch = !!('createTouch' in document),
+      cursorStartEvent = isTouch ? 'touchstart' : 'mousedown',
+      cursorMoveEvent = isTouch ? 'touchmove' : 'mousemove',
+      cursorEndEvent = isTouch ? 'touchend' : 'mouseup',
+      // shim layer with setTimeout fallback
+      // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+      requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       || 
+                window.webkitRequestAnimationFrame || 
+                window.mozRequestAnimationFrame    || 
+                window.oRequestAnimationFrame      || 
+                window.msRequestAnimationFrame     || 
+                function( callback, element ){
+                  window.setTimeout(callback, 1000 / 60);
+                };
+      })();
+  
+  
+  // ======================= UndulateNode  ===============================
+  
+  function UndulateNode( settings ) {
+    // extend settings over constructor
+    for ( var key in settings ) {
+      this[ key ] = settings[ key ];
+    }
+    
+    this.angle = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    
+    // console.log( this.origin.x, this.origin.y );
+  }
+  
+  UndulateNode.prototype.elasticizeProperty = function ( prop, target ) {
+    var deltaProp = prop + 'Delta';
+    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.parent.elasticity + (this[ prop ] - target) * this.parent.responsiveness;
+    this[ prop ] -= this[ deltaProp ];
+  };
+  
+  UndulateNode.prototype.update = function() {
+    
+    var cursor, identifier, distance, angle, dx, dy;
+    for ( identifier in this.parent.cursors ) {
+      cursor = this.parent.cursors[ identifier ];
+      dx = cursor.pageX - this.x;
+      dy = cursor.pageY - this.y;
+      distance = Math.sqrt( dx * dx + dy * dy );
+      angle = Math.atan2( dy, dx );
+    }
+    
+    this.angle = angle || this.angle;
+    
+    var targetD = distance ? (this.parent.displacementRadius - distance) : 0;
+    targetD = Math.max( targetD, 0 ) * this.parent.displacementIntensity;
+    
+    var targetOffsetX = Math.cos( this.angle ) * -targetD,
+        targetOffsetY = Math.sin( this.angle ) * -targetD;
+        
+    this.elasticizeProperty( 'offsetX', targetOffsetX );
+    this.elasticizeProperty( 'offsetY', targetOffsetY );
+
+    this.x = this.origin.x + this.offsetX;
+    this.y = this.origin.y + this.offsetY;
+    
+  };
+  
+  UndulateNode.prototype.render = function() {
+    var ctx = this.parent.context;
+    ctx.beginPath();
+    ctx.arc( this.x, this.y, 5, 0, Math.PI*2 );
+    ctx.fill();
+    ctx.closePath();
+  };
+  
+  
+  // ======================= UndulateNet  ===============================
+
+  function UndulateNet( settings ) {
+    // extend settings over constructor
+    for ( var key in settings ) {
+      this[ key ] = settings[ key ];
+    }
+    
+    // don't proceed if canvas is not supported
+    if ( !this.canvas.getContext || !this.canvas.getContext('2d') ) {
+      return;
+    }
+    
+    // get canvas context
+    this.context = this.canvas.getContext('2d');
+    
+    // set size
+    this.width = this.canvas.width = window.innerWidth;
+    this.height = this.canvas.height = window.innerHeight;
+    
+    this.nodes = [];
+    
+    this.cols = Math.ceil( this.width / this.spacing );
+    this.rows = Math.ceil( this.height / ( this.spacing * HALF_ROOT_3 ) );
+
+    var xAdjust = ( ( this.width % this.spacing ) - this.spacing / 2 ) / 2,
+        yAdjust = ( this.height % ( this.spacing * HALF_ROOT_3 ) ) / 2,
+        origin,
+        y, x, row, col, rowAdjust, node;
+    
+    var ctx = this.context;
+    
+    for ( row = 0; row < this.rows; row++ ) {
+      y = row * this.spacing * HALF_ROOT_3 + yAdjust;
+      for ( col = 0; col < this.cols; col++ ) {
+        rowAdjust = (row % 2) * 0.5;
+        origin = {
+          x : (col + rowAdjust) * this.spacing + xAdjust,
+          'y' : y
+        }
+        node = new UndulateNode({
+          parent : this,
+          'origin' : origin,
+          'row' : row,
+          'col' : col
+        });
+        
+        // console.log( origin.x, origin.y )
+        this.nodes.push( node );
+        
+        ctx.beginPath();
+        ctx.arc( node.originX, node.originY, 10, 0, Math.PI*2 );
+        ctx.fill();
+      }
+    }
+    
+    this.cursors = {};
+    
+    this.canvas.addEventListener( cursorStartEvent, this, false );
+    
+    this.animate();
+    
+  }
+  
+  UndulateNet.prototype.animate = function() {
+    
+    var ctx = this.context,
+        node;
+    
+    ctx.clearRect( 0, 0, this.width, this.height );
+    
+    var node;
+    for ( var i=0, len = this.nodes.length; i < len; i++) {
+      node = this.nodes[i];
+      node.update();
+    }
+    
+    for ( i=0; i < len; i++ ) {
+      node = this.nodes[i];
+      node.render();
+    }
+    
+    var instance = this;
+    requestAnimFrame( function() { instance.animate(); } );
+    
+  };
+  
+  // ======================= event handling ===============================
+
+  UndulateNet.prototype.handleEvent = function( event ) {
+    if ( this[event.type] ) {
+      this[event.type](event);
+    }
+  };
+
+  UndulateNet.prototype.mousedown = function( event ) {
+    this.cursorStart( event );
+    event.preventDefault();
+    
+  };
+  
+
+  
+  UndulateNet.prototype.mousemove = function( event ) {
+    this.cursors.mouse = event;
+  };
+  
+  UndulateNet.prototype.mouseup = function( event ) {
+    this.cursorEnd( event );
+  };
+  
+  // TODO - add multi-touch
+  UndulateNet.prototype.touchstart = function( event ) {
+    this.cursorStart( event.changedTouches[0] );
+    event.preventDefault();
+    
+  };
+
+  UndulateNet.prototype.touchend = function( event ) {
+    this.cursorEnd( event );
+  };
+  
+  UndulateNet.prototype.cursorStart = function( cursor ) {
+    this.cursors.mouse = cursor;
+    
+    document.addEventListener( cursorMoveEvent, this, false );
+    document.addEventListener( cursorEndEvent, this, false );
+    
+  };
+  
+  UndulateNet.prototype.cursorEnd = function ( event ) {
+    delete this.cursors.mouse;
+    
+    document.removeEventListener( cursorMoveEvent, this, false );
+    document.removeEventListener( cursorEndEvent, this, false );
+    
+  };
+  
+  // ======================= init  ===============================
+  
+  function init() {
+    
+    var canvasElem = document.getElementById('canvas');
+    new UndulateNet({
+      canvas: canvasElem,
+      spacing: 35,
+      elasticity: 0.93,
+      responsiveness: 0.07,
+      displacementRadius: 220,
+      displacementIntensity: 0.75
+    });
+  }
+  
+  window.addEventListener( 'load', init, false);
+  
+})();
+</script>
+
+</body>
+</html>
