@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Rotating dashed border</title>
+
+  <style media="screen">
+/*    html, body { height: 100%; }*/
+  
+  
+body {
+  background: #B4BEC8;
+  color: white;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+a, a:visited { 
+  color: #268; 
+  text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+.rotating-dashed {
+  position: relative;
+  margin: 30px auto;
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  color: hsl( 0, 0%, 40% );
+}
+
+.rotating-dashed .dashing {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.rotating-dashed .dashing:nth-of-type(1) { -webkit-transform: rotate(   0deg ); }
+.rotating-dashed .dashing:nth-of-type(2) { -webkit-transform: rotate(  90deg ); }
+.rotating-dashed .dashing:nth-of-type(3) { -webkit-transform: rotate( 180deg ); }
+.rotating-dashed .dashing:nth-of-type(4) { -webkit-transform: rotate( 270deg ); }
+
+.rotating-dashed .dashing i {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  border-bottom: 5px dashed;
+}
+
+.rotating-dashed strong {
+  display: block;
+  width: 105%;
+  line-height: 90px;
+  text-align: center;
+  position: absolute;
+  font-size: 50px;
+  -webkit-transform: rotate( 90deg );
+}
+
+.rotating-dashed:hover {
+  color: white;
+  cursor: pointer; 
+}
+
+.rotating-dashed:hover .dashing i {
+  -webkit-animation: slideDash 2.5s infinite linear;
+}
+
+@-webkit-keyframes slideDash {
+  from { -webkit-transform: translateX( -50% ); }
+  to   { -webkit-transform: translateX(   0% ); }
+}
+  </style>
+
+</head>
+<body>
+
+<h1>Rotating dashed border</h1>
+
+<p>Hover over target to trigger animation</p>
+
+<div class="rotating-dashed">
+  <span class="dashing"><i></i></span>
+  <span class="dashing"><i></i></span>
+  <span class="dashing"><i></i></span>
+  <span class="dashing"><i></i></span>
+  <strong>&#x279C;</strong>
+</div>
+
+<p>Re:  <a href="">maxart</a>: I'd be really interested to know how people would replicate this <a href="http://f.cl.ly/items/0A282x0M3C3i1N2f3m2M/dragndrop.mov">(animated drop target)</a> with web technologies  / @deaxon ? @desandro ?</p>
+
+<p>See <a href="http://playground.deaxon.com/css/rotating-dashed-border/">Benjamin De Cock&rsquo;s solution</a></p>
+
+<h2>Pros</h2>
+
+<ul>
+  <li>No images</li>
+  <li>Only one animation declation</li>
+</ul>
+
+<h2>Cons</h2>
+
+<ul>
+  <li>No rounded corners</li>
+  <li>WebKit only</li>
+  <li>Border dashes are in sync only when the dimensions of the target are a multiple of 30. Probably won't be in sync for other browsers who render dashed borders differently.</li>
+  <li>Requires additional tag inside</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ordered List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<style type="text/css" media="screen">
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #131313;
+    overflow: hidden;
+}
+
+#wrap {
+    width: 1400px;
+    left: 50%;
+    margin-left: -700px;
+    position: relative;
+}
+
+#grad1 {
+    position: absolute;
+    background: 
+        -moz-radial-gradient(center center, circle contain, rgba(38,46,65,1) 0%, rgba(38,46,65,0) 100%), 
+        -moz-radial-gradient(center center, circle contain, rgba(38,46,65,.6) 0%, rgba(38,46,65,0) 100%);
+    background: 
+        -webkit-gradient(radial, center center, 0,  center center, 500, from(rgba(38,46,65,1)), to(rgba(38,46,65,0)) ),
+        -webkit-gradient(radial, center center, 0,  center center, 500, from(rgba(38,46,65,.6)), to(rgba(38,46,65,0)) );
+    width: 1000px;
+    height: 1000px;
+    left: 150px;
+    top: -100px;
+}
+
+#grad2 {
+    position: absolute;
+    background: 
+        -moz-radial-gradient(center center, circle contain, rgba(36,59,42,1) 0%, rgba(36,59,49,0) 100%), 
+        -moz-radial-gradient(center center, circle contain, rgba(36,59,42,.5) 0%, rgba(36,59,49,0) 100%);
+    background: 
+        -webkit-gradient(radial, center center, 0,  center center, 500, from(rgba(36,59,42,1)), to(rgba(36,59,42,0)) ),
+        -webkit-gradient(radial, center center, 0,  center center, 500, from(rgba(36,59,42,.5)), to(rgba(36,59,42,0)) );
+    width: 1000px;
+    height: 1000px;
+    left: 450px;
+    top: -210px;
+}
+
+ol {
+    -moz-transform: translate(430px, 380px) rotate(45deg);
+    -webkit-transform: translate(430px, 380px) rotate(45deg);
+    -o-transform: translate(430px, 380px) rotate(45deg);
+    transform: translate(430px, 380px) rotate(45deg);
+}
+
+ol li {
+    list-style: none;
+    width: 300px;
+    height: 125px;
+    background: hsla(0, 0%, 0%,.1);
+    margin-bottom: 70px;
+    margin-left: 200px;
+    position: relative;
+    -moz-border-radius: 25px;
+    -webkit-borde-radius: 25px;
+    border-radius: 25px;
+}
+
+ol li:before {
+    content: '';
+    display: block;
+    position: absolute;
+    background: hsla(0, 0%, 0%,.1);
+    width: 125px;
+    height: 125px;
+    left: -200px;
+    -moz-border-radius: 25px;
+    -webkit-borde-radius: 25px;
+    border-radius: 25px;
+}    
+
+</style>
+
+</head>
+<body>
+
+<div id="wrap">
+    <div id="grad1"></div>
+    <div id="grad2"></div>
+    <ol>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
+</div>
+
+
+</body>
+</html>

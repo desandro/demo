@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Metafizzy</title>
+
+  <style media="screen">
+    body {
+      background: #FED;
+    }
+  
+    #header {
+      font-size: 120px;
+      text-align: center;
+      width: 720px;
+      margin: 0 auto;
+      position: relative;
+      height: 200px;
+      border: 1px solid #CCC;
+/*      font-family: Georgia, serif;*/
+      font-family: Futura, 'Century Gothic', sans-serif;
+/*      font-style: italic;*/
+      font-weight: normal;
+      text-transform: uppercase;
+      color: white;
+      letter-spacing: 0.1em;
+    }
+    
+    .csstransforms3d #header {
+      -webkit-perspective: 400;
+    }
+    
+    .csstransforms3d #header .object3d {
+      -webkit-transform-style: preserve-3d;
+/*      -webkit-animation: rotateHeader 4s linear infinite;*/
+      -webkit-transform: translateZ( -50px );
+    }
+    
+    .csstransforms3d #header .pane {
+      position: absolute;
+      display: block;
+      width: 100%;
+/*      color: hsla( 120, 80%, 40%, 1);*/
+      color: hsla( 30, 80%, 50%, 1);
+      line-height: 200px;
+    }
+    
+    .csstransforms3d #header .pane:last-child {
+      color: hsla( 0, 100%, 20%, 1);
+/*      color: white;*/
+    }
+    
+    @-webkit-keyframes rotateHeader {
+        0% { -webkit-transform: translateZ( -50px ) rotate3d( 0, 1, 0,   0deg ); }
+       50% { -webkit-transform: translateZ( -50px ) rotate3d( 0, 1, 0, 180deg ); }
+      100% { -webkit-transform: translateZ( -50px ) rotate3d( 0, 1, 0, 360deg ); }
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1 id="header">nclud</h1>
+  
+  <script>
+    // ======================= DOM Utility Functions from PastryKit =============================== //
+
+    // Sure, we could use jQuery or XUI for these, 
+    // but these are concise and will work with plain vanilla JS
+
+    Element.prototype.hasClassName = function (a) {
+        return new RegExp("(?:^|\\s+)" + a + "(?:\\s+|$)").test(this.className);
+    };
+
+    Element.prototype.addClassName = function (a) {
+        if (!this.hasClassName(a)) {
+            this.className = [this.className, a].join(" ");
+        }
+    };
+
+    Element.prototype.removeClassName = function (b) {
+        if (this.hasClassName(b)) {
+            var a = this.className;
+            this.className = a.replace(new RegExp("(?:^|\\s+)" + b + "(?:\\s+|$)", "g"), " ");
+        }
+    };
+
+    Element.prototype.toggleClassName = function (a) {
+      this[this.hasClassName(a) ? "removeClassName" : "addClassName"](a);
+    };
+    
+  
+    // framework
+    var ZZ = {};
+    
+    
+    
+    // check browser support for 3D transforms
+    // this has been hacked together from Modernizr csstransforms3d test
+    // -> Thanks Faruk Ates, Paul Irish http://modernizr.com
+    ZZ.check3DSupport = function() {
+
+      var modElem = document.createElement('modernizr'),
+          m_style = modElem.style,
+          docHead = document.head || document.getElementsByTagName('head')[0],
+          docElement = document.documentElement,
+          prefixes = ' -webkit- -moz- -o- -ms- -khtml- '.split(' '),
+
+          test_props = function ( props ) {
+            for ( var i in props ) {
+              if ( m_style[ props[i] ] !== undefined ) {
+                return true;
+              }
+            }
+          },
+
+          ret = !!test_props([ 'perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective' ]);
+
+      if (ret && 'webkitPerspective' in docElement.style){
+
+        var mq = '@media ('+prefixes.join('transform-3d),(')+'modernizr)',
+            st = document.createElement('style'),
+            div = document.createElement('div'),
+            ret;
+
+        st.textContent = mq + '{#modernizr{height:3px}}';
+        docHead.appendChild(st);
+        div.id = 'modernizr';
+        docElement.appendChild(div);
+
+        ret = !!( div.offsetHeight === 3 );
+
+        st.parentNode.removeChild(st);
+        div.parentNode.removeChild(div);
+
+      }
+
+      ZZ.is3DTransformsSupported = ret;
+      
+      var className3d = ZZ.is3DTransformsSupported ? 'csstransforms3d' : 'no-csstransforms3d';
+      document.body.addClassName( className3d );
+
+    };
+    
+    ZZ.generate3dHeader = function() {
+      var header = document.getElementById('header'),
+          text = header.textContent,
+          paneCount = 100,
+          object3d = document.createElement('div'),
+          fragment = document.createDocumentFragment();
+      
+      header.textContent = '';
+      
+      object3d.addClassName('object3d');
+      // object3d.style.WebkitTransform = 'translateZ(' + (-paneCount/2) + 'px)';
+      
+      for (var i=0; i < paneCount; i++) {
+        var pane = document.createElement('span');
+        pane.addClassName('pane');
+        pane.textContent = text;
+        pane.style.WebkitTransform = 'translateZ(' +  ( i - paneCount/2 ) + 'px)';
+        object3d.appendChild( pane );
+      }
+      
+      header.appendChild( object3d )
+      
+      
+    };
+    
+    var init = function() {
+      
+      ZZ.check3DSupport();
+      
+      if ( ZZ.is3DTransformsSupported ) {
+        ZZ.generate3dHeader();
+      }
+    
+    };
+  
+    window.addEventListener( 'DOMContentLoaded', init, false);
+  </script>
+
+</body>
+</html>

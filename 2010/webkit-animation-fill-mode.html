@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Webkit Animation Fill Mode</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+<style media="screen">
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  -webkit-perspective: 800;
+}
+
+div {
+  border: 1px solid #CCC;
+  max-width: 700px;
+  margin-bottom: 1.0em;
+  padding: 0.5em;
+}
+
+div.selected {
+  background: #CDF;
+}
+
+/* no copy/paste dialog in iOS */
+div, div * { 
+  -webkit-user-select: none; 
+  -webkit-touch-callout: none;
+  cursor: pointer;
+}
+
+div, p {
+  -webkit-transform-style: preserve-3d;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.0em;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+div p {
+  margin: 0.5em 0;
+}
+
+div p i {
+  display: inline-block;
+}
+
+
+div.selected p i {
+  -webkit-animation: basic 1s;
+}
+div#none.selected p i      { -webkit-animation-fill-mode: none; }
+div#forwards.selected p i  { -webkit-animation-fill-mode: forwards; }
+div#backwards.selected p i { -webkit-animation-fill-mode: backwards; }
+div#both.selected p i      { -webkit-animation-fill-mode: both; }
+
+
+@-webkit-keyframes basic {
+    0% { -webkit-transform: rotate(-135deg) scale(2)  }
+   50% { -webkit-transform: scale(.5) }
+  100% { -webkit-transform: scale(1.5) rotate(180deg) }
+}
+
+
+div p i:nth-child( 1) { -webkit-animation-delay:  .0s; }
+div p i:nth-child( 2) { -webkit-animation-delay:  .1s; }
+div p i:nth-child( 3) { -webkit-animation-delay:  .2s; }
+div p i:nth-child( 4) { -webkit-animation-delay:  .3s; }
+div p i:nth-child( 5) { -webkit-animation-delay:  .4s; }
+div p i:nth-child( 6) { -webkit-animation-delay:  .5s; }
+div p i:nth-child( 7) { -webkit-animation-delay:  .6s; }
+div p i:nth-child( 8) { -webkit-animation-delay:  .7s; }
+div p i:nth-child( 9) { -webkit-animation-delay:  .8s; }
+div p i:nth-child(10) { -webkit-animation-delay:  .9s; }
+div p i:nth-child(11) { -webkit-animation-delay: 1.0s; }
+div p i:nth-child(12) { -webkit-animation-delay: 1.1s; }
+div p i:nth-child(13) { -webkit-animation-delay: 1.2s; }
+div p i:nth-child(14) { -webkit-animation-delay: 1.3s; }
+
+</style>
+
+<script>
+  var init = function() {
+    // check if device supports touch
+    // via Thomas Fuchs http://mir.aculo.us/2010/06/04/making-an-ipad-html5-app-making-it-really-fast/
+    var supportsTouch = 'createTouch' in document;
+    
+    var boxes = document.getElementsByTagName('div');
+
+    for(i=0; i < boxes.length; i++) {
+      // add selected class when div is clicked
+      boxes[i].addEventListener( (supportsTouch ? 'touchstart' : 'mousedown'), function(){
+        var selectedBox = this;
+        selectedBox.className = 'selected';
+        
+        // remove class when tap/click ends
+        window.addEventListener( (supportsTouch ? 'touchend' : 'mouseup'), function(){
+          selectedBox.className = '';
+        }, false)
+      }, false);
+    }
+    
+  };
+
+  window.addEventListener('load', init, false);  
+</script>
+
+</head>
+<body>
+
+  <h1>Webkit Animation Fill Mode</h1>
+  
+  <div id="none">
+    <h2>None</h2>
+    <p><i>The</i> <i>Pomegranate</i> <i>and</i> <i>Apple-Tree</i> <i>disputed</i> <i>as</i> <i>to</i> <i>which</i> <i>was</i> <i>the</i> <i>most</i> <i>beautiful.</i></p>
+  </div>
+  <div id="forwards">
+    <h2>Forwards</h2>
+    <p><i>When</i> <i>their</i> <i>strife</i> <i>was</i> <i>at</i> <i>its</i> <i>height,</i> <i>a</i> <i>Bramble</i> <i>from</i> <i>the</i> <i>neighboring</i> <i>hedge</i>
+    </p>
+  </div>
+  <div id="backwards">
+    <h2>Backwards</h2>
+    <p><i>lifted</i> <i>up</i> <i>its</i> <i>voice,</i>  <i>and</i> <i>said</i> <i>in</i> <i>a</i> <i>boastful</i> <i>tone:</i></p> 
+  </div> 
+  <div id="both">
+    <h2>Both</h2>
+    <p><i>"Pray,</i> <i>my</i> <i>dear</i> <i>friends,</i> <i>in</i> <i>my</i> <i>presence</i> <i>at</i> <i>least</i> <i>cease</i> <i>from</i> <i>such</i> <i>vain</i> <i>disputings."</i></p>
+  </div>
+
+
+</body>
+</html>
