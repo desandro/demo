@@ -10,6 +10,7 @@
       padding: 0;
       overflow: hidden;
       font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #EEE;
     }
     
     #options {
@@ -44,7 +45,7 @@
   <ul>
     <li>
       <label for="elasticity">elasticity</label>
-      <input id="elasticity" type="range" min="0" max="100" value="93" data-units="%" />
+      <input id="elasticity" type="range" min="0" max="100" value="84" data-units="%" />
     </li>
     <li>
       <label for="viscosity">viscosity</label>
@@ -57,6 +58,14 @@
     <li>
       <label for="displacement-intensity">displacement intensity</label>
       <input id="displacement-intensity" type="range" min="-100" max="100" value="75" data-units="%" />
+    </li>
+    <li>
+      <label for="render-grid">grid</label>
+      <input id="render-grid" type="checkbox" checked />
+    </li>
+    <li>
+      <label for="render-dots">dots</label>
+      <input id="render-dots" type="checkbox" />
     </li>
   </ul>
 </div>
@@ -171,22 +180,31 @@
   UndulateNode.prototype.render = function() {
     var ctx = this.parent.context;
     // ctx.lineWidth = 5;
+    
+    // ctx.strokeStyle = 'white';
 
-    // node on right
-    this.renderLineToNode( this.parent.nodes[ this.row ][ this.col + 1 ] );
-
-    var nextNodeRow = this.parent.nodes[ this.row + 1 ],
-        colShiftA = this.row % 2 ? 0 : -1,
-        colShiftB = this.row % 2 ? 1 : 0;
-    if ( nextNodeRow ) {
-      this.renderLineToNode( nextNodeRow[ this.col + colShiftA ] );
-      this.renderLineToNode( nextNodeRow[ this.col + colShiftB ] );
+    if ( this.parent.isRenderingGrid ) {
+      
+      // node on right
+      this.renderLineToNode( this.parent.nodes[ this.row ][ this.col + 1 ] );
+    
+      var nextNodeRow = this.parent.nodes[ this.row + 1 ],
+          colShiftA = this.row % 2 ? 0 : -1,
+          colShiftB = this.row % 2 ? 1 : 0;
+      if ( nextNodeRow ) {
+        // diagonal down/left
+        this.renderLineToNode( nextNodeRow[ this.col + colShiftA ] );
+        // diagonal down/right
+        this.renderLineToNode( nextNodeRow[ this.col + colShiftB ] );
+      }
     }
     
     // ctx.fillStyle = 'white';
-    // ctx.beginPath();
-    // ctx.arc( this.x, this.y, 6, 0, Math.PI*2 );
-    // ctx.fill();
+    if ( this.parent.isRenderingDots ) {
+      ctx.beginPath();
+      ctx.arc( this.x, this.y, 5, 0, Math.PI*2 );
+      ctx.fill();
+    }
     
   };
   
@@ -348,10 +366,12 @@
     var net = new UndulateNet({
       canvas: canvasElem,
       nodeCount: 600, // an approximate figure
-      elasticity: 0.93,
+      elasticity: 0.84,
       viscosity: 0.08,
       displacementRadius: 220,
-      displacementIntensity: 1
+      displacementIntensity: 1,
+      isRenderingGrid: true,
+      isRenderingDots: false
     });
     
     // add range displays
@@ -379,6 +399,14 @@
     
     document.getElementById('displacement-intensity').addEventListener( 'change', function( event ) {
       net.displacementIntensity = parseInt( event.target.value, 10 ) / 100;
+    }, false );
+    
+    document.getElementById('render-grid').addEventListener( 'change', function( event ) {
+      net.isRenderingGrid = event.target.checked;
+    }, false );
+    
+    document.getElementById('render-dots').addEventListener( 'change', function( event ) {
+      net.isRenderingDots = event.target.checked;
     }, false );
     
   }
