@@ -60,6 +60,10 @@
       <input id="displacement-intensity" type="range" min="-100" max="100" value="75" data-units="%" />
     </li>
     <li>
+      <label for="node-count"># of nodes (approx.)</label>
+      <input id="node-count" type="range" min="100" max="2000" value="500" />
+    </li>
+    <li>
       <label for="render-grid">grid</label>
       <input id="render-grid" type="checkbox" checked />
     </li>
@@ -239,6 +243,20 @@
     // get canvas context
     this.context = this.canvas.getContext('2d');
     
+    // add nodes
+    this.populate();
+    
+    this.cursors = {};
+    
+    this.canvas.addEventListener( cursorStartEvent, this, false );
+    
+    this.animate();
+    
+  }
+  
+  UndulateNet.prototype = new EventHandler();
+  
+  UndulateNet.prototype.populate = function() {
     // set size
     this.width = this.canvas.width = window.innerWidth;
     this.height = this.canvas.height = window.innerHeight;
@@ -279,16 +297,7 @@
         this.nodes[row].push( node );
       }
     }
-    
-    this.cursors = {};
-    
-    this.canvas.addEventListener( cursorStartEvent, this, false );
-    
-    this.animate();
-    
-  }
-  
-  UndulateNet.prototype = new EventHandler();
+  };
   
   UndulateNet.prototype.animate = function() {
     
@@ -400,6 +409,38 @@
     document.getElementById('displacement-intensity').addEventListener( 'change', function( event ) {
       net.displacementIntensity = parseInt( event.target.value, 10 ) / 100;
     }, false );
+    
+    
+    // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+    // by John Hann, who, sadly, is not Jon Hamm
+    var debounce = function ( func, execAsap ) {
+      var timeout;
+
+      return function debounced () {
+        var obj = this, args = arguments;
+        function delayed () {
+          if ( !execAsap ) {
+            func.apply( obj, args );
+          }
+          timeout = null; 
+        };
+
+        if ( timeout ) {
+          clearTimeout( timeout );
+        } else if ( execAsap ) {
+          func.apply( obj, args );
+        }
+
+        timeout = setTimeout( delayed, 100 ); 
+      };
+
+    }
+    
+    
+    document.getElementById('node-count').addEventListener( 'change', debounce( function( event ) {
+      net.nodeCount = parseInt( event.target.value, 10 );
+      net.populate();
+    }), false );
     
     document.getElementById('render-grid').addEventListener( 'change', function( event ) {
       net.isRenderingGrid = event.target.checked;
