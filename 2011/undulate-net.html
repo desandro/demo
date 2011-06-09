@@ -9,6 +9,29 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    #options {
+      background: hsla( 0, 0%, 100%, 0.8 );
+      position: absolute;
+      padding: 10px;
+      left: 0;
+      top: 0;
+      font-size: 14px;
+      width: 400px;
+      overflow: hidden;
+    }
+    
+    #options li, ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    #options label {
+      display: inline-block;
+      width: 170px;
     }
   </style>
 
@@ -16,6 +39,27 @@
 <body>
 
 <canvas id="canvas"></canvas>
+
+<div id="options">
+  <ul>
+    <li>
+      <label for="elasticity">elasticity</label>
+      <input id="elasticity" type="range" min="0" max="100" value="93" data-units="%" />
+    </li>
+    <li>
+      <label for="responsiveness">responsiveness</label>
+      <input id="responsiveness" type="range" min="0" max="100" value="8" data-units="%" />
+    </li>
+    <li>
+      <label for="displacement-radius">displacement radius</label>
+      <input id="displacement-radius" type="range" min="0" max="1000" value="220" data-units="px" />
+    </li>
+    <li>
+      <label for="displacement-intensity">displacement intensity</label>
+      <input id="displacement-intensity" type="range" min="-100" max="100" value="75" data-units="%" />
+    </li>
+  </ul>
+</div>
 
 <script>
 (function(){
@@ -38,6 +82,44 @@
                 };
       })();
   
+  
+  /* ==================== EventHandler ==================== */
+
+  function EventHandler() {}
+
+  EventHandler.prototype.handleEvent = function( event ) {
+    if ( this[event.type] ) {
+      this[event.type](event);
+    }
+  };
+  
+  /* ==================== RangeDisplay ==================== */
+
+  // displays the value of a range input
+  // why isn't this in the HTML5 spec?
+
+  function RangeDisplay( range ) {
+    this.range = range;
+    this.output = document.createElement('span');
+    this.output.className = 'range-display';
+
+
+    this.units = this.range.getAttribute('data-units') || '';
+
+    this.range.parentNode.appendChild( this.output );
+
+    this.range.addEventListener( 'change', this, false);
+    
+    // trigger change to set text
+    this.change();
+    
+  }
+
+  RangeDisplay.prototype = new EventHandler();
+
+  RangeDisplay.prototype.change = function( event ) {
+    this.output.textContent = this.range.value + this.units;
+  }
   
   // ======================= UndulateNode  ===============================
   
@@ -188,6 +270,8 @@
     
   }
   
+  UndulateNet.prototype = new EventHandler();
+  
   UndulateNet.prototype.animate = function() {
     
     var ctx = this.context,
@@ -216,19 +300,10 @@
   
   // ======================= event handling ===============================
 
-  UndulateNet.prototype.handleEvent = function( event ) {
-    if ( this[event.type] ) {
-      this[event.type](event);
-    }
-  };
-
   UndulateNet.prototype.mousedown = function( event ) {
     this.cursorStart( event );
     event.preventDefault();
-    
   };
-  
-
   
   UndulateNet.prototype.mousemove = function( event ) {
     this.cursors.mouse = event;
@@ -270,14 +345,42 @@
   function init() {
     
     var canvasElem = document.getElementById('canvas');
-    new UndulateNet({
+    var net = new UndulateNet({
       canvas: canvasElem,
       nodeCount: 600, // an approximate figure
       elasticity: 0.93,
-      responsiveness: 0.1,
-      displacementRadius: 300,
+      responsiveness: 0.08,
+      displacementRadius: 220,
       displacementIntensity: 1
     });
+    
+    // add range displays
+    var inputs = document.getElementsByTagName('input'),
+        input;
+    for (var i=0, len = inputs.length; i < len; i++) {
+      input = inputs[i];
+      if ( input.type === 'range' ) {
+        new RangeDisplay( input );
+      }
+    }
+    
+    // range changes
+    document.getElementById('elasticity').addEventListener( 'change', function( event ) {
+      net.elasticity = parseInt( event.target.value, 10 ) / 100;
+    }, false );
+
+    document.getElementById('responsiveness').addEventListener( 'change', function( event ) {
+      net.responsiveness = parseInt( event.target.value, 10 ) / 100;
+    }, false );
+    
+    document.getElementById('displacement-radius').addEventListener( 'change', function( event ) {
+      net.displacementRadius = parseInt( event.target.value, 10 );
+    }, false );
+    
+    document.getElementById('displacement-intensity').addEventListener( 'change', function( event ) {
+      net.displacementIntensity = parseInt( event.target.value, 10 ) / 100;
+    }, false );
+    
   }
   
   window.addEventListener( 'load', init, false);
