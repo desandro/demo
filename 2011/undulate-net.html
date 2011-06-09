@@ -47,8 +47,8 @@
       <input id="elasticity" type="range" min="0" max="100" value="93" data-units="%" />
     </li>
     <li>
-      <label for="responsiveness">responsiveness</label>
-      <input id="responsiveness" type="range" min="0" max="100" value="8" data-units="%" />
+      <label for="viscosity">viscosity</label>
+      <input id="viscosity" type="range" min="0" max="100" value="8" data-units="%" />
     </li>
     <li>
       <label for="displacement-radius">displacement radius</label>
@@ -137,7 +137,7 @@
   
   UndulateNode.prototype.elasticizeProperty = function ( prop, target ) {
     var deltaProp = prop + 'Delta';
-    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.parent.elasticity + (this[ prop ] - target) * this.parent.responsiveness;
+    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.parent.elasticity + (this[ prop ] - target) * this.parent.viscosity;
     this[ prop ] -= this[ deltaProp ];
   };
   
@@ -349,7 +349,7 @@
       canvas: canvasElem,
       nodeCount: 600, // an approximate figure
       elasticity: 0.93,
-      responsiveness: 0.08,
+      viscosity: 0.08,
       displacementRadius: 220,
       displacementIntensity: 1
     });
@@ -369,8 +369,8 @@
       net.elasticity = parseInt( event.target.value, 10 ) / 100;
     }, false );
 
-    document.getElementById('responsiveness').addEventListener( 'change', function( event ) {
-      net.responsiveness = parseInt( event.target.value, 10 ) / 100;
+    document.getElementById('viscosity').addEventListener( 'change', function( event ) {
+      net.viscosity = parseInt( event.target.value, 10 ) / 100;
     }, false );
     
     document.getElementById('displacement-radius').addEventListener( 'change', function( event ) {
