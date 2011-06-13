@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>options</title>
+
+  <style media="screen">
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>options</h1>
+  
+  <h2>Movies</h2>
+  
+  <ul>
+    <li><a href="#movie=matrix">The Matrix</a></li>
+    <li><a href="#movie=bill-and-teds">Bill and Ted's excellent adventure</a></li>
+    <li><a href="#movie=lakehouse">The lakehouse</a></li>
+    <li><a href="#movie=speed">Speed</a></li>
+  </ul>
+  
+  <h2>Characters</h2>
+  
+  <ul>
+    <li><a href="#character=neo">Neo</a></li>
+    <li><a href="#character=bill">Bill</a></li>
+    <li><a href="#character=utah">Johnny Utah</a></li>
+    <li><a href="#character=constantine">Constantine</a></li>
+  </ul>
+  
+  <script src="http://code.jquery.com/jquery-1.6.1.js"></script>
+  <script src="jquery.ba-bbq.js"></script>
+  <script>
+    
+    var options = {};
+  
+    $(function(){
+      
+      $(window).bind( 'hashchange', function(event) {
+        console.log( $.deparam.fragment() )
+      });
+      
+      $('a').click(function(){
+        var $this = $(this),
+            href = $this.attr('href').replace( /^#/, '' ),
+            option = $.deparam( href );
+        
+        
+        
+        for ( var key in option ) {
+          options[ key ] = option[ key ]
+        }
+        
+        
+        // console.log( options )
+        
+        $.bbq.pushState( options );
+        
+        return false;
+        
+        // for ( key in options ) {
+        //   console.log( key, ': ', options[key] );
+        // }
+      })
+    });
+  
+  </script>
+
+</body>
+</html>
