@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>hashes</title>
+
+  <style media="screen">
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>hashes</h1>
+  
+  <ul>
+    <li><a href="#alpha">alpha</a></li>
+    <li><a href="#beta">beta</a></li>
+    <li><a href="#gamma">gamma</a></li>
+    <li><a href="#delta&epsilon">delta&amp;epsilon</a></li>
+  </ul>
+  
+  <script src="http://code.jquery.com/jquery-1.6.1.js"></script>
+  <script src="jquery.ba-bbq.js"></script>
+  <script>
+    $(function(){
+      $(window).bind( 'hashchange', function(event) {
+
+        var hash = $.param.fragment(),
+            obj = hash.length && $.deparam( hash );
+
+        console.log( 'hi mom', hash, obj );
+
+      }).trigger( 'hashchange' );
+    });
+  
+  </script>
+
+</body>
+</html>
