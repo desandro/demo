@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>scale up</title>
+
+  <style media="screen">
+    body {
+      background: black;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #container {
+      -webkit-transform-origin: left top;
+         -moz-transform-origin: left top;
+           -o-transform-origin: left top;
+              transform-origin: left top;
+    }
+    
+    .pixel {
+      float: left;
+      width: 1px;
+      height: 1px;
+      -webkit-transition: background-color 2s linear;
+         -moz-transition: background-color 2s linear;
+           -o-transition: background-color 2s linear;
+              transition: background-color 2s linear;
+    }
+    
+    
+  </style>
+
+</head>
+<body>
+
+
+<script>
+  function init() {
+    var container = document.createElement('div'),
+        cols = 4,
+        transitionDuration = 2,
+        width = window.innerWidth,
+        scale = width / cols,
+        rows = Math.ceil( window.innerHeight / scale ) + 1,
+        fragment = document.createDocumentFragment();
+    
+    container.id = 'container';
+    container.style.width = (cols+1) + 'px';
+    container.style.WebkitTransform = 'scale3d('+ scale + ', '+ scale + ', 1) translate(-0.5px, -0.5px)';
+    container.style.MozTransform = 'scale('+ scale + ') translate(-0.5px, -0.5px)';
+    container.style.OTransform = 'scale('+ scale + ') translate(-0.5px, -0.5px)';
+    container.style.transform = 'scale('+ scale + ') translate(-0.5px, -0.5px)';
+    
+    var pixelCount = (cols+1) * rows,
+        i = pixelCount,
+        pixels = [];
+    while (i--) {
+      var pixel = document.createElement('div'),
+          delay = ~~(Math.random() * transitionDuration * 1000)  + 'ms';
+      pixel.className = 'pixel';
+      pixels.push( pixel );
+      pixel.style.WebkitTransitionDelay = delay;
+      pixel.style.MozTransitionDelay = delay;
+      pixel.style.OTransitionDelay = delay;
+      pixel.style.transitionDelay = delay;
+      fragment.appendChild( pixel );
+    }
+    
+    container.appendChild( fragment );
+    
+    document.body.appendChild( container );
+    
+    var changeColors = function() {
+      var i = pixels.length,
+          hue;
+      while (i--) {
+        hue = ~~(Math.random() * 360);
+        pixels[i].style.backgroundColor = 'hsl(' + hue + ', 100%, 50%)';
+      }
+    };
+    
+    changeColors();
+    
+    var t = 0
+    function animate() {
+      changeColors();
+      setTimeout( animate, transitionDuration * 1000 )
+    };
+    setTimeout( animate, 10 )
+  }
+  
+  window.addEventListener('load', init, false);
+</script>
+
+</body>
+</html>
