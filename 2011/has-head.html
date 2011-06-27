@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>has head</title>
+
+  <style media="screen">
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>has head</h1>
+  
+  <p>Checks if <code>document.head</code> is supported.</p>
+  
+  <button id="button">Do I have document.head?</button>
+  
+  <script>
+    function init() {
+      var hasHead = !!document.head ? 'I haz document.head' : 'NO document.head !!',
+          button = document.getElementById('button');
+      
+      button.addEventListener( 'click', function(){
+        alert( hasHead );
+      }, false)
+    }
+  
+    window.addEventListener( 'load', init, false);
+  </script>
+
+</body>
+</html>
