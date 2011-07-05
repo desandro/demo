@@ -13,23 +13,15 @@
 </head>
 <body>
 
-  <h1>has head</h1>
+  <h1 id="title">has head</h1>
   
   <p>Checks if <code>document.head</code> is supported.</p>
   
-  <button id="button">Do I have document.head?</button>
-  
   <script>
-    function init() {
-      var hasHead = !!document.head ? 'I haz document.head' : 'NO document.head !!',
-          button = document.getElementById('button');
-      
-      button.addEventListener( 'click', function(){
-        alert( hasHead );
-      }, false)
+    window.onload = function() {
+      var message = !!document.head ? 'I haz document.head' : 'NO document.head !!';
+      document.getElementById('title').innerText = message;
     }
-  
-    window.addEventListener( 'load', init, false);
   </script>
 
 </body>
