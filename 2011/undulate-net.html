@@ -45,23 +45,23 @@
   <ul>
     <li>
       <label for="elasticity">elasticity</label>
-      <input id="elasticity" type="range" min="0" max="100" value="93" data-units="%" />
+      <input id="elasticity" type="range" min="0" max="100" value="97" data-units="%" />
     </li>
     <li>
       <label for="responsiveness">responsiveness</label>
-      <input id="responsiveness" type="range" min="0" max="100" value="8" data-units="%" />
+      <input id="responsiveness" type="range" min="0" max="100" value="6" data-units="%" />
     </li>
     <li>
       <label for="displacement-radius">displacement radius</label>
-      <input id="displacement-radius" type="range" min="0" max="1000" value="280" data-units="px" />
+      <input id="displacement-radius" type="range" min="0" max="1000" value="180" data-units="px" />
     </li>
     <li>
       <label for="displacement-intensity">displacement intensity</label>
-      <input id="displacement-intensity" type="range" min="-100" max="100" value="-25" data-units="%" />
+      <input id="displacement-intensity" type="range" min="-100" max="100" value="-30" data-units="%" />
     </li>
     <li>
       <label for="node-count"># of nodes (approx.)</label>
-      <input id="node-count" type="range" min="100" max="2000" value="500" />
+      <input id="node-count" type="range" min="100" max="2000" value="550" />
     </li>
     <li>
       <label for="render-grid">grid</label>
@@ -132,7 +132,7 @@
 
   RangeDisplay.prototype.change = function( event ) {
     this.output.textContent = this.range.value + this.units;
-  }
+  };
   
   // ======================= UndulateNode  ===============================
   
@@ -221,7 +221,7 @@
     var ctx = this.parent.context;
     ctx.beginPath();
     ctx.moveTo( this.x, this.y );
-    ctx.lineTo( node.x, node.y )
+    ctx.lineTo( node.x, node.y );
     ctx.stroke();
     
   };
@@ -286,7 +286,7 @@
         origin = {
           x : (col + rowAdjust) * this.spacing + xAdjust,
           'y' : y
-        }
+        };
         node = new UndulateNode({
           parent : this,
           'origin' : origin,
@@ -374,11 +374,11 @@
     var canvasElem = document.getElementById('canvas');
     var net = new UndulateNet({
       canvas: canvasElem,
-      nodeCount: 600, // an approximate figure
-      elasticity: 0.93,
-      responsiveness: 0.08,
-      displacementRadius: 300,
-      displacementIntensity: -0.25,
+      nodeCount: 550, // an approximate figure
+      elasticity: 0.97,
+      responsiveness: 0.06,
+      displacementRadius: 180,
+      displacementIntensity: -0.30,
       isRenderingGrid: true,
       isRenderingDots: false
     });
@@ -423,7 +423,7 @@
             func.apply( obj, args );
           }
           timeout = null; 
-        };
+        }
 
         if ( timeout ) {
           clearTimeout( timeout );
@@ -434,7 +434,7 @@
         timeout = setTimeout( delayed, 100 ); 
       };
 
-    }
+    };
     
     
     document.getElementById('node-count').addEventListener( 'change', debounce( function( event ) {

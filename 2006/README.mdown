@@ -1,0 +1,1 @@
+The "foxhole" files are CSS demos, named because they worked only in the then-latest version of Firefox.

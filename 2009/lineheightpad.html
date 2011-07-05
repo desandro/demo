@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+
+<head>
+	<title>Line-height v padding demo</title>
+<style type="text/css">
+
+* {  margin: 0;  padding: 0; }
+
+body {
+  background: #FFF;
+  font-family: "Trebuchet MS";
+}
+
+div {
+  width: 400px;
+  margin: 20px auto;
+}
+
+ul {
+  margin-bottom: 4px;
+  background: #F33;
+  border-bottom: 2px solid #000;
+  height: 50px;  /* needed for IE */
+}
+
+li {
+  list-style: none;
+  float: left;
+  margin-right: 1px;
+}
+
+li a {
+  display: block;
+  text-align: center;
+  width: 60px;
+  text-decoration: none;
+}
+li a:link, li a:visited {  background: #EEE; }
+li a:hover { background: #FAA; }
+
+.one {  font-size: 12px; }
+.two {  font-size: 14px; }
+.three {  font-size: 18px; }
+.four {  font-size: 22px; }
+.five {  font-size: 28px; }
+.six {  font-size: 36px; }
+
+#ex-b .one a {  padding: 16px 0; }
+#ex-b .two a { padding: 16px 0;}
+#ex-b .three a { padding: 13px 0;}
+#ex-b .four a { padding: 11px 0;}
+#ex-b .five a { padding: 7px 0;}
+#ex-b .six a { padding: 3px 0;}
+
+#ex-c li a {
+  line-height: 50px;
+}
+
+
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div>
+	<p><strong>Ex. A</strong>: No padding or line-height</p>
+	
+	<ul id="ex-a">
+		<li class="one"><a href="#">one</a></li>
+		<li class="two"><a href="#">two</a></li>
+		<li class="three"><a href="#">three</a></li>
+		<li class="four"><a href="#">four</a></li>
+		<li class="five"><a href="#">five</a></li>
+		<li class="six"><a href="#">six</a></li>
+	</ul>
+	
+	<p><strong>Ex. B</strong>: padding </p>
+	
+	<ul id="ex-b">
+		<li class="one"><a href="#">one</a></li>
+		<li class="two"><a href="#">two</a></li>
+		<li class="three"><a href="#">three</a></li>
+		<li class="four"><a href="#">four</a></li>
+		<li class="five"><a href="#">five</a></li>
+		<li class="six"><a href="#">six</a></li>
+	</ul>
+	
+	<p><strong>Ex. C</strong>: Line-height</p>
+	<ul id="ex-c">
+		<li class="one"><a href="#">one</a></li>
+		<li class="two"><a href="#">two</a></li>
+		<li class="three"><a href="#">three</a></li>
+		<li class="four"><a href="#">four</a></li>
+		<li class="five"><a href="#">five</a></li>
+		<li class="six"><a href="#">six</a></li>
+	</ul>
+</div>
+
+	</body>
+
+</html>
+
