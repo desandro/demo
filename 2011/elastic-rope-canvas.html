@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" /> -->
+  <title>elastic rope</title>
+
+  <style media="screen">
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    #elastic-rope {
+      height: 600px;
+      position: relative;
+    }
+    
+    .elastic-rope-dot {
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 8px;
+      position: absolute;
+    }
+
+    .elastic-rope-link {
+      width: 10px;
+      height: 100%;
+      background: white;
+      position: absolute;
+      left: 8px;
+      top: 0px;
+/*      border-radius: 8px;*/
+/*      border: 1px solid white;*/
+      -webkit-transform-origin: left center;
+         -moz-transform-origin: left center;
+           -o-transform-origin: left center;
+              transform-origin: left center;
+    }
+
+    .beta.elastic-rope-dot {
+/*      background: white;*/
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+    }
+
+    .beta.elastic-rope-dot .elastic-rope-link {
+/*      background: white;*/
+      left: 5px;
+    }
+  </style>
+
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+
+<script>
+(function(){
+  
+  /* -------------------- Utility vars -------------------- */
+  
+  var isTouch = !!('createTouch' in document),
+      cursorStartEvent = isTouch ? 'touchstart' : 'mousedown',
+      cursorMoveEvent = isTouch ? 'touchmove' : 'mousemove',
+      cursorEndEvent = isTouch ? 'touchend' : 'mouseup',
+      
+      // shim layer with setTimeout fallback
+      // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+      requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       || 
+                window.webkitRequestAnimationFrame || 
+                window.mozRequestAnimationFrame    || 
+                window.oRequestAnimationFrame      || 
+                window.msRequestAnimationFrame     || 
+                function( callback, element){
+                  window.setTimeout(callback, 1000 / 60);
+                };
+      })();
+  
+  
+  /* -------------------- Elastic Rope Canvas constructor -------------------- */
+  
+  function ElasticRopeCanvas ( settings ) {
+    // extend settings over constructor
+    for ( var key in settings ) {
+      this[ key ] = settings[ key ];
+    }
+    
+    this.canvas.width = window.innerWidth - 30;
+    this.canvas.height = 540;
+    
+    if ( !this.canvas.getContext || !this.canvas.getContext('2d') ) {
+      return;
+    }
+    
+    this.context = this.canvas.getContext('2d');
+    
+    this.t = 0;
+    
+    this.center = {
+      x: this.canvas.width / 2,
+      y: this.canvas.height / 2
+    };
+    
+    this.cursorPoint = this.center;
+    
+    this.links = [];
+    
+    var link,
+        linkSettings = {
+          rope: this,
+          x: this.center.x,
+          y: this.center.y
+        };;
+    
+    for (var i=0; i < this.linkCount; i++) {
+      linkSettings.index = i;
+      link = new ElasticRopeLink( linkSettings );
+      this.links.push( link );
+    }
+    
+    
+    this.canvas.addEventListener( cursorStartEvent, this, false);
+    
+    // kick off animation
+    this.animate();
+    
+    // console.log( this.context )
+    
+  }
+  
+  /* -------------------- Methods -------------------- */
+  
+  ElasticRopeCanvas.prototype.animate = function() {
+    
+    this.render();
+    
+    var instance = this;
+    requestAnimFrame( function(){ instance.animate() } );
+    
+  };
+  
+  ElasticRopeCanvas.prototype.render = function() {
+    
+    this.t++;
+    
+    var ctx = this.context;
+    
+    ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height )
+    
+    // var x = this.t % this.canvas.width,
+    //     y = this.t % this.canvas.height;
+    // 
+    // ctx.fillRect( x, y, 20, 20 );
+    
+    var link;
+    
+    ctx.beginPath();
+    var link = this.links[0];
+    ctx.moveTo( link.x, link.y )
+    link.update();
+    
+    for (var i=1, len = this.links.length; i < len; i++) {
+      link = this.links[i];
+      previousLink = this.links[ i - 1 ]
+      link.update();
+      ctx.lineTo( link.x, link.y );
+      
+      // bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+      // ctx.bezierCurveTo( previousLink.cp2.x, previousLink.cp2.y, link.cp1.x, link.cp1.y, link.x, link.y );
+      
+      // ctx.fillStyle = 'red';
+      // ctx.fillRect( link.cp1.x - 3, link.cp1.y - 3, 6, 6 );
+      // ctx.fillStyle = 'blue';
+      // ctx.fillRect( previousLink.cp2.x - 3, previousLink.cp2.y - 3, 6, 6 );
+      // ctx.fillStyle = 'yellow';
+      // ctx.fillRect( link.x - 5, link.y - 5, 10, 10 );
+    }
+    
+    // console.log( this.links[0].x, this.links[0].y )
+    
+    ctx.lineWidth = 16;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    
+  };
+  
+  // ======================= event handling ===============================
+
+  ElasticRopeCanvas.prototype.handleEvent = function( event ) {
+    if ( this[event.type] ) {
+      this[event.type](event);
+    }
+  };
+
+  ElasticRopeCanvas.prototype.mousedown = function( event ) {
+    this.cursorStart( event );
+    event.preventDefault();
+  };
+  
+  ElasticRopeCanvas.prototype.touchstart = function( event ) {
+    if ( !this.hasActiveCursor ) {
+      var touch = event.changedTouches[0];
+      this.cursorStart( touch );
+      this.cursorIdentifier = touch.identifier;
+    }
+    event.preventDefault();
+  };
+  
+  ElasticRopeCanvas.prototype.cursorStart = function ( cursor ) {
+    this.updateCursorPoint( cursor );
+    document.addEventListener( cursorMoveEvent, this, false);
+    document.addEventListener( cursorEndEvent, this, false);
+    
+    this.hasFirstTouch = true;
+    this.hasActiveCursor = true;
+    
+  };
+  
+  ElasticRopeCanvas.prototype.mousemove = function( event ) {
+    // console.log(event.type)
+    this.updateCursorPoint( event );
+    event.preventDefault();
+  };
+  
+  ElasticRopeCanvas.prototype.touchmove = function( event ) {
+    for (var i=0, len = event.changedTouches.length; i < len; i++) {
+      var touch = event.changedTouches[i];
+      if ( touch.identifier == this.cursorIdentifier ) {
+        this.updateCursorPoint( touch );
+      }
+    }
+    
+    event.preventDefault();
+  };
+  
+  ElasticRopeCanvas.prototype.mouseup = function( event ) {
+    this.cursorEnd();
+  };
+  
+  ElasticRopeCanvas.prototype.touchend = function( event ) {
+    for (var i=0, len = event.changedTouches.length; i < len; i++) {
+      var touch = event.changedTouches[i];
+      if ( touch.identifier == this.cursorIdentifier ) {
+        this.cursorEnd();
+      }
+    }
+  };
+  
+  ElasticRopeCanvas.prototype.cursorEnd = function() {
+    document.removeEventListener( cursorMoveEvent, this, false);
+    document.removeEventListener( cursorEndEvent, this, false);
+    this.hasActiveCursor = false;
+    
+  };
+  
+  ElasticRopeCanvas.prototype.updateCursorPoint = function ( cursor ) {
+    this.cursorPoint = {
+      x: cursor.pageX,
+      y: cursor.pageY
+    };
+    
+    // console.log( this.cursorPoint.x,this.cursorPoint.y  )
+  };
+  
+  /* -------------------- ElasticRopeLink -------------------- */
+  
+  function ElasticRopeLink ( settings ) {
+    // extend settings on to constructor
+    for ( var key in settings ) {
+      this[ key ] = settings[ key ];
+    }
+    this.angle = 0;
+    
+  }
+  
+  ElasticRopeLink.prototype.elasticizeProperty = function ( prop, target ) {
+    var deltaProp = prop + 'Delta';
+    this[ deltaProp ] = ( this[ deltaProp ] || 0 ) * this.rope.elasticity + (this[ prop ] - target) * this.rope.responsiveness;
+    this[ prop ] -= this[ deltaProp ];
+  };
+  
+  ElasticRopeLink.prototype.update = function() {
+    // calculate distance
+    var previousLink = this.index ? this.rope.links[ this.index - 1 ] : this.rope.cursorPoint,
+        dy = previousLink.y - this.y,
+        dx = previousLink.x - this.x;
+    this.angle = Math.atan2( dy, dx );
+  
+    var targetX = previousLink.x + Math.cos( this.angle ) * this.rope.linkDistance,
+        targetY = previousLink.y + Math.sin( this.angle ) * this.rope.linkDistance;
+        
+    this.elasticizeProperty( 'x', targetX );
+    this.elasticizeProperty( 'y', targetY );
+    
+    // dy = previousLink.y - this.y;
+    // dx = previousLink.x - this.x;
+    // this.angle = Math.atan2( dy, dx );
+    // 
+    // var PI_2 = Math.PI * 2,
+    //     cpd = this.rope.linkDistance / 3;
+    // 
+    // this.cp1 = {
+    //   x: this.x + Math.cos( this.angle ) * cpd,
+    //   y: this.y + Math.sin( this.angle ) * cpd
+    // };
+    // 
+    // this.cp2 = {
+    //   x: this.x - Math.cos( this.angle ) * cpd,
+    //   y: this.y - Math.sin( this.angle ) * cpd
+    // };
+  
+  };
+  
+  
+  /* -------------------- init -------------------- */
+  
+  
+  function init() {
+    
+    var canvasEl = document.getElementById('canvas');
+    
+    new ElasticRopeCanvas({
+      canvas: canvasEl,
+      linkCount: 60,
+      responsiveness: 0.12,
+      elasticity: 0.6,
+      linkDistance: 10
+    });
+  }
+  
+  window.addEventListener( 'load', init, false);
+  
+})();
+  
+</script>
+
+</body>
+</html>
