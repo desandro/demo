@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>radial items</title>
+
+  <style media="screen">
+    body {
+      font-family: sans-serif;
+      height: 3000px;
+    }
+  
+    .radialized-item {
+      position: absolute;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    #alpha {
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
+      position: absolute;
+      left: 500px;
+      top: 300px;
+    }
+    
+
+
+    #beta {
+      font-size: 30px;
+      font-weight: bold;
+      color: green;
+      position: absolute;
+      left: 600px;
+      top: 1200px;
+    }
+
+
+    #gamma {
+      font-size: 30px;
+      font-weight: bold;
+      color: blue;
+      position: absolute;
+      left: 700px;
+      top: 2400px;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>radial items</h1>
+  
+  <ul id="alpha">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+    <li>11</li>
+    <li>12</li>
+    <li>13</li>
+    <li>14</li>
+    <li>15</li>
+    <li>16</li>
+    <li>17</li>
+    <li>18</li>
+    <li>19</li>
+    <li>20</li>
+    <li>21</li>
+    <li>22</li>
+    <li>23</li>
+    <li>24</li>
+    <li>25</li>
+    <li>26</li>
+    <li>27</li>
+    <li>28</li>
+    <li>29</li>
+    <li>30</li>
+    <li>31</li>
+  </ul>
+  <ul id="beta">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+    <li>11</li>
+    <li>12</li>
+    <li>13</li>
+    <li>14</li>
+    <li>15</li>
+    <li>16</li>
+    <li>17</li>
+    <li>18</li>
+    <li>19</li>
+    <li>20</li>
+    <li>21</li>
+    <li>22</li>
+    <li>23</li>
+    <li>24</li>
+    <li>25</li>
+    <li>26</li>
+    <li>27</li>
+    <li>28</li>
+    <li>29</li>
+    <li>30</li>
+    <li>31</li>
+  </ul>
+  <ul id="gamma">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+    <li>11</li>
+    <li>12</li>
+    <li>13</li>
+    <li>14</li>
+    <li>15</li>
+    <li>16</li>
+    <li>17</li>
+    <li>18</li>
+    <li>19</li>
+    <li>20</li>
+    <li>21</li>
+    <li>22</li>
+    <li>23</li>
+    <li>24</li>
+    <li>25</li>
+    <li>26</li>
+    <li>27</li>
+    <li>28</li>
+    <li>29</li>
+    <li>30</li>
+    <li>31</li>
+  </ul>
+  
+  <script src="http://code.jquery.com/jquery.min.js"></script>
+  <script>
+    $.fn.radialize = function( options ) {
+      var opts = $.extend({
+            radius: 100,
+            rotation: 360,
+            offset: 0,
+            isAnimated: false,
+            isClockwise: true,
+            isCentered: true
+          }, options),
+          applyStyle = opts.isAnimated ? 'animate' : 'css';
+      
+      function degToRad( angle ) {
+        return ( angle / 360 ) * Math.PI * 2;
+      }
+      
+      var direction = opts.isClockwise ? 1 : -1,
+          rotation = degToRad( opts.rotation ) * direction,
+          offset = degToRad( opts.offset ),
+          alignment = opts.isCentered ? alignment = rotation * -0.5 : 0;
+      
+      return this.each(function(){
+        var $this = $(this),
+            $children = $this.children(),
+            len = $children.length,
+            $child, angle, style, transform;
+
+        $this.css({
+          position: 'relative'
+        });
+        
+        offset += opts.isCentered ? rotation * ( 0.5 / len ) : 0;
+
+        $this.children().addClass('radialized-item').each(function( i ){
+          $child = $(this),
+          angle = rotation * ( i / len ) + offset + alignment - Math.PI / 2;
+          transform = 'rotate('+(angle + Math.PI/2)+'rad)';
+
+          $child[ applyStyle ]({
+            left: Math.cos( angle ) * opts.radius - $child.width() * 0.5,
+            top: Math.sin( angle ) * opts.radius - $child.height() * 0.5,
+            WebkitTransform: transform,
+            MozTransform: transform,
+          });
+        });
+        
+      });
+    };
+  
+    $(function(){
+      
+      $('#alpha').radialize({
+        radius: 200,
+        rotation: 180,
+        // offset: 45,
+        isCentered: false
+        
+      })
+
+
+      $('#beta').radialize({
+        radius: 400,
+        rotation: 180,
+        offset: -90,
+        isClockwise: false
+      })
+      
+      $('#gamma').radialize({
+        radius: 500,
+        rotation: 270
+      }).click(function(){
+        
+      })
+      // $('ul').radialize()
+    });
+  </script>
+
+</body>
+</html>
