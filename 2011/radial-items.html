@@ -10,7 +10,7 @@
       height: 3000px;
     }
   
-    .radialized-item {
+    .radialItemsd-item {
       position: absolute;
       list-style: none;
       margin: 0;
@@ -54,6 +54,8 @@
 <body>
 
   <h1>radial items</h1>
+  
+  <p>Simple jQuery plugin for radial layout</p>
   
   <ul id="alpha">
     <li>1</li>
@@ -157,7 +159,7 @@
   
   <script src="http://code.jquery.com/jquery.min.js"></script>
   <script>
-    $.fn.radialize = function( options ) {
+    $.fn.radialItems = function( options ) {
       var opts = $.extend({
             radius: 100,
             rotation: 360,
@@ -189,7 +191,7 @@
         
         offset += opts.isCentered ? rotation * ( 0.5 / len ) : 0;
 
-        $this.children().addClass('radialized-item').each(function( i ){
+        $this.children().addClass('radialItemsd-item').each(function( i ){
           $child = $(this),
           angle = rotation * ( i / len ) + offset + alignment - Math.PI / 2;
           transform = 'rotate('+(angle + Math.PI/2)+'rad)';
@@ -199,6 +201,8 @@
             top: Math.sin( angle ) * opts.radius - $child.height() * 0.5,
             WebkitTransform: transform,
             MozTransform: transform,
+            OTransform: transform,
+            'transform': transform
           });
         });
         
@@ -207,7 +211,7 @@
   
     $(function(){
       
-      $('#alpha').radialize({
+      $('#alpha').radialItems({
         radius: 200,
         rotation: 180,
         // offset: 45,
@@ -216,20 +220,37 @@
       })
 
 
-      $('#beta').radialize({
+      $('#beta').radialItems({
         radius: 400,
         rotation: 180,
         offset: -90,
         isClockwise: false
-      })
+      });
       
-      $('#gamma').radialize({
+      var optsA = {
+        radius: 500,
+        rotation: 100,
+        isAnimated: true
+      };
+      
+      var optsB = {
+        radius: 400,
+        rotation: 240,
+        isAnimated: true
+      }
+      
+      var isToggled = false,
+          options;
+      
+      $('#gamma').radialItems({
         radius: 500,
         rotation: 270
       }).click(function(){
-        
-      })
-      // $('ul').radialize()
+        isToggled = !isToggled;
+        options = isToggled ? optsA : optsB;
+        $('#gamma').radialItems( options );
+      });
+
     });
   </script>
 
