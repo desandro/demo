@@ -10,53 +10,182 @@
     }
   
     #nclud-logo {
-      width: 1.0em;
-      font-size: 100px;
-      margin: 100px;
+      color: ;
+      margin: 200px;
       position: relative;
-      -webkit-transform: scaleY(1.07);
-         -moz-transform: scaleY(1.07);
-          -ms-transform: scaleY(1.07);
-           -o-transform: scaleY(1.07);
-              transform: scaleY(1.07);
+      width: 1.0em;
+      font-size: 20px;
+      height: 1.0em;;
     }
-  
-    #nclud-logo:before,
-    #nclud-logo:after {
+    
+    #nclud-logo a {
+      display: block;
+      height: 100%;
+      text-decoration: none;
+    }
+    
+    #nclud-logo .mark:before,
+    #nclud-logo .mark:after {
       content: '';
       display: block;
       position: absolute;
-      -webkit-transform: rotate(45deg);
-         -moz-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-           -o-transform: rotate(45deg);
-              transform: rotate(45deg);
+      border-radius: 0.5em;
     }
   
-    #nclud-logo:before {
+    #nclud-logo .mark:before {
       width: 1.0em;
       height: 1.0em;
       background: #7DBE36;
-      border-radius: 0.5em;
       border-bottom-right-radius: 0;
     }
   
-    #nclud-logo:after {
+    #nclud-logo .mark:after {
       background: #A6D27B;
-      width: 0.65em;
-      height: 0.65em;
-      border-radius: 0.475em;
+      width: 0.7em;
+      height: 0.7em;
       border-top-left-radius: 0;
       border: 0.15em solid #00384c;
       right: -0.3em;
       top: -0.3em;
+    }
+    
+    #nclud-logo p {
+      position: absolute;
+      left: 50%;
+      top: 50px;
+      color: white;
+      font-size: 20px;
+      z-index: 10;
+    }
+    
+    #nclud-logo p,
+    #nclud-logo p .letter {
+      
+      -webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+         -moz-transition:    -moz-transform 0.4s, opacity 0.4s;
+           -o-transition:      -o-transform 0.4s, opacity 0.4s;
+              transition:         transform 0.4s, opacity 0.4s;
+    }
+    
+    #nclud-logo p .letter {
+      display: inline-block;
+      position: absolute;
+      text-align: center;
+      line-height: 1.4em;
+      top: -0.7em;
+      opacity: 0;
+    }
+    
+    #nclud-logo:hover p .letter {
+      opacity: 1;
     }
   </style>
 
 </head>
 <body>
 
-  <div id="nclud-logo"></div>
+  <div id="nclud-logo">
+    <a href="http://nclud.com">
+      <div class="mark"></div>
+      <p>an nclud creation</p>
+    </a>
+  </div>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script>
+    $(function(){
+      
+      
+      // lettering.js-er-ize
+      var $ncludTagline = $('#nclud-logo p');
+          letteredText = $ncludTagline.text().split(''),
+          lettersHtml = '';
+          
+      $.each(letteredText, function(i, letter){
+        if (letter === ' ') {
+          letter = '&nbsp;&nbsp;'
+        }
+        lettersHtml += '<span class="letter l' + (i+1) + '">' + letter + '</span>';
+      });
+      
+      $ncludTagline.html( lettersHtml );
+      
+      var charWidths = [],
+          angle = 0,
+          charAngles = [],
+          $letter,
+          w,
+          padding = 1,
+          y = -100,
+          transformVal,
+          styles = [];
+
+
+      function getVendorProps( val, prop ) {
+        prop = prop || 'transform';
+        return '-webkit-' + prop + ':' + val + 
+                ';-moz-' + prop + ':' + val + 
+                 ';-ms-' + prop + ':' + val + 
+                  ';-o-' + prop + ':' + val + 
+                     ';' + prop + ':' + val + ';';
+      }
+      
+      $ncludTagline.find('.letter').each(function(i, letter){
+        $letter = $(letter);
+        w = $letter.width();
+        
+        
+        charWidths.push( w );
+        
+        if ( charWidths[i-1] ) {
+          angle += Math.atan( (charWidths[i-1] / 2 + padding) / y ) * -1;
+        }
+        
+        angle += Math.atan( (w/2 + padding) / y ) * -1;
+
+        charAngles.push( angle );
+
+        restTransform = 'rotate(' + angle + 'rad) translate(0px, ' + y*0.5 + 'px) scale(0.001)';
+        hoverTransform = 'rotate(' + angle + 'rad) translate(0px, ' + y + 'px)';
+
+        var delay = (i * 0.03) + 's';
+
+        $letter.css({ left: w * -0.5 });
+        
+        styles.push(
+          '#nclud-logo p .l' + (i+1) + '{' + 
+            getVendorProps( restTransform ) +
+            getVendorProps( delay, 'transition-delay' ) +
+          '}' +
+          '#nclud-logo:hover p .l' + (i+1) + '{'+ getVendorProps( hoverTransform ) + '}'
+        );
+
+      });
+      
+      var taglineAngle = (angle + charAngles[0]) * -0.5;
+
+      // shim in transform styles to keep filesize small
+      styles.push(
+        '#nclud-logo p {' + 
+          getVendorProps( 'rotate(' + taglineAngle + 'rad)' ) + 
+        '}' + 
+        '#nclud-logo .mark:before, #nclud-logo .mark:after {' +
+          getVendorProps('rotate(45deg)') +
+        '}' + 
+        '#nclud-logo .mark {' +
+          getVendorProps('scaleY(1.07)') +
+        '}'
+      );
+
+
+
+      $('<style />', {
+        text: styles.join('')
+      }).appendTo('head');
+        
+      
+    });
+  </script>
 
 </body>
 </html>
