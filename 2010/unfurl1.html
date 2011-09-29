@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>unfurl1</title>
+    <meta charset="utf-8" />
+
+    
+<style media="screen">
+body { font-family: sans-serif; }
+
+
+#wrap {
+-webkit-transform-style: preserve-3d;
+-webkit-perspective: 800;
+-webkit-perspective-origin: 240px 180px ;
+    width: 480px;
+    height: 320px;
+    margin: 0 auto;
+    position: relative;
+/*    overflow: hidden;*/
+}
+
+.panel {
+    background: url(http://i.imgur.com/8Q6xs.jpg);
+    width: 21px;
+    height: 320px;
+    position: relative;
+    -webkit-transform: translate3d(20px, 0, 0px) rotateY(0);
+    -webkit-transform-origin: 0 0;
+    -webkit-transform-origin-z: 0;
+    -webkit-transition: all 2s ease-in-out;
+    -webkit-transform-style: preserve-3d;
+    opacity: 1;
+/*    -webkit-backface-visibility: hidden;*/
+}
+
+.panel1 {
+    background-position: 0px 0;
+    -webkit-transition-delay: 480ms;
+}
+
+#wrap:hover .panel1 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-10deg);
+}
+
+.panel2 {
+    background-position: -20px 0;
+    -webkit-transition-delay: 460ms;
+}
+
+#wrap:hover .panel2 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-12deg);
+}
+
+.panel3 {
+    background-position: -40px 0;
+    -webkit-transition-delay: 440ms;
+}
+
+#wrap:hover .panel3 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-15deg);
+}
+
+.panel4 {
+    background-position: -60px 0;
+    -webkit-transition-delay: 420ms;
+}
+
+#wrap:hover .panel4 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-17deg);
+}
+
+.panel5 {
+    background-position: -80px 0;
+    -webkit-transition-delay: 400ms;
+}
+
+#wrap:hover .panel5 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-20deg);
+}
+
+.panel6 {
+    background-position: -100px 0;
+    -webkit-transition-delay: 380ms;
+}
+
+#wrap:hover .panel6 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-22deg);
+}
+
+.panel7 {
+    background-position: -120px 0;
+    -webkit-transition-delay: 360ms;
+}
+
+#wrap:hover .panel7 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-25deg);
+}
+
+.panel8 {
+    background-position: -140px 0;
+    -webkit-transition-delay: 340ms;
+}
+
+#wrap:hover .panel8 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-27deg);
+}
+
+.panel9 {
+    background-position: -160px 0;
+    -webkit-transition-delay: 320ms;
+}
+
+#wrap:hover .panel9 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-30deg);
+}
+
+.panel10 {
+    background-position: -180px 0;
+    -webkit-transition-delay: 300ms;
+}
+
+#wrap:hover .panel10 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-32deg);
+}
+
+.panel11 {
+    background-position: -200px 0;
+    -webkit-transition-delay: 280ms;
+}
+
+#wrap:hover .panel11 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-35deg);
+}
+
+.panel12 {
+    background-position: -220px 0;
+    -webkit-transition-delay: 260ms;
+}
+
+#wrap:hover .panel12 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-37deg);
+}
+
+.panel13 {
+    background-position: -240px 0;
+    -webkit-transition-delay: 240ms;
+}
+
+#wrap:hover .panel13 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-40deg);
+}
+
+.panel14 {
+    background-position: -260px 0;
+    -webkit-transition-delay: 220ms;
+}
+
+#wrap:hover .panel14 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-42deg);
+}
+
+.panel15 {
+    background-position: -280px 0;
+    -webkit-transition-delay: 200ms;
+}
+
+#wrap:hover .panel15 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-45deg);
+}
+
+.panel16 {
+    background-position: -300px 0;
+    -webkit-transition-delay: 180ms;
+}
+
+#wrap:hover .panel16 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-47deg);
+}
+
+.panel17 {
+    background-position: -320px 0;
+    -webkit-transition-delay: 160ms;
+}
+
+#wrap:hover .panel17 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-50deg);
+}
+
+.panel18 {
+    background-position: -340px 0;
+    -webkit-transition-delay: 140ms;
+}
+
+#wrap:hover .panel18 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-52deg);
+}
+
+.panel19 {
+    background-position: -360px 0;
+    -webkit-transition-delay: 120ms;
+}
+
+#wrap:hover .panel19 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-55deg);
+}
+
+.panel20 {
+    background-position: -380px 0;
+    -webkit-transition-delay: 100ms;
+}
+
+#wrap:hover .panel20 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-57deg);
+}
+
+.panel21 {
+    background-position: -400px 0;
+    -webkit-transition-delay: 80ms;
+}
+
+#wrap:hover .panel21 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-60deg);
+}
+
+.panel22 {
+    background-position: -420px 0;
+    -webkit-transition-delay: 60ms;
+}
+
+#wrap:hover .panel22 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-62deg);
+}
+
+.panel23 {
+    background-position: -440px 0;
+    -webkit-transition-delay: 40ms;
+}
+
+#wrap:hover .panel23 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-65deg);
+}
+
+.panel24 {
+    background-position: -460px 0;
+    -webkit-transition-delay: 20ms;
+}
+
+#wrap:hover .panel24 {
+    -webkit-transform: translate3d(20px, 0, 0px)  rotateY(-67deg);
+}
+
+
+#wrap:hover .panel {
+/*    opacity: .9;*/
+}
+
+#wrap .panel1 {
+/*        -webkit-transform: translate3d(0, 0, 0px)  rotateY(0deg);*/
+}
+
+#wrap:hover .panel1 {
+/*    -webkit-transform: translate3d(0, 0, 0px)  rotateY(-90deg);*/
+}
+
+/*#wrap:hover .panel {opacity: .95;}*/
+</style>
+
+
+
+
+</head>
+<body>
+
+    <h1>unfurl1</h1>
+    
+    <p>hover to animate unfurl</p>
+
+    <div id="wrap">
+        
+                    <div class="panel panel1">
+                      <div class="panel panel2">
+                        <div class="panel panel3">
+                          <div class="panel panel4">
+                            <div class="panel panel5">
+                              <div class="panel panel6">
+                                <div class="panel panel7">
+                                  <div class="panel panel8">
+                                    <div class="panel panel9">
+                                      <div class="panel panel10">
+                                        <div class="panel panel11">
+                                          <div class="panel panel12">
+                                            <div class="panel panel13">
+                                              <div class="panel panel14">
+                                                <div class="panel panel15">
+                                                  <div class="panel panel16">
+                                                    <div class="panel panel17">
+                                                      <div class="panel panel18">
+                                                        <div class="panel panel19">
+                                                          <div class="panel panel20">
+                                                            <div class="panel panel21">
+                                                              <div class="panel panel22">
+                                                                <div class="panel panel23">
+                                                                  <div class="panel panel24">
+                                                                            </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                
+    </div>
+
+</body>
+</html>
