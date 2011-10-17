@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>04-reach</title>
+
+  <style media="screen">
+    body {
+      font-family: sans-serif;
+      background: #DDD;
+      padding: 0;
+    }
+  
+    .segment {
+      position: absolute;
+      left: 0;
+      top: -1px;
+      height: 3px;
+      background: hsla( 0, 0%, 0%, 0.5 );
+      -webkit-transform-origin: left center;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>04-reach</h1>
+  
+<script>
+
+var segments = [],
+    segmentCount = 40,
+    segmentLength = 10,
+    origin = {
+      x: 400,
+      y: 200
+    };
+
+function Segment() {
+  this.element = document.createElement('div');
+  this.element.className = 'segment';
+  this.element.style.width = segmentLength + 'px';
+  document.body.appendChild( this.element );
+  this.x = origin.x;
+  this.y = origin.y;
+  this.angle = 0;
+}
+
+Segment.prototype.reach = function( target ) {
+  this.target = target;
+  var dx = target.x - this.x,
+      dy = target.y - this.y;
+
+  this.angle = Math.atan2( dy, dx );
+};
+
+Segment.prototype.position = function(i) {
+  var prevSeg = segments[i];
+  this.x = prevSeg.x + Math.cos( prevSeg.angle ) * segmentLength;
+  this.y = prevSeg.y + Math.sin( prevSeg.angle ) * segmentLength;
+};
+
+Segment.prototype.render = function() {
+  this.element.style.WebkitTransform = 'translate3d(' + this.x + 'px, ' + this.y + 'px, 0) ' +
+    ' rotate(' + this.angle + 'rad)'
+};
+
+function handleMousemove( event ) {
+  // reach first segment
+  segments[0].reach({ x: event.pageX, y: event.pageY });
+  // reach other segments
+  var target, prevSeg;
+  for (var i=1; i < segmentCount; i++) {
+    prevSeg = segments[ i-1 ];
+    target = {
+      x: prevSeg.target.x - Math.cos( prevSeg.angle ) * segmentLength,
+      y: prevSeg.target.y - Math.sin( prevSeg.angle ) * segmentLength
+    }
+    segments[i].reach( target );
+  }
+  
+  // work backwards to set positions
+  for ( i=segmentCount-1; i >= 1; i-- ) {
+    segments[ i-1 ].position( i );
+  }
+
+  for ( i=0; i < segmentCount; i++) {
+    segments[i].render();
+  }
+}
+
+function init() {
+  
+  // create segments
+  var i = segmentCount,
+      segment;
+  while ( i-- ) {
+    segment = new Segment();
+    segments.push( segment );
+  }
+  
+  document.addEventListener( 'mousemove', handleMousemove, false);
+}
+
+window.addEventListener( 'load', init, false);
+
+</script>
+
+</body>
+</html>
