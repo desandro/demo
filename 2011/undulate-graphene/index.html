@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>index</title>
+
+  <style media="screen">
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+  
+  <div id="options" class="col5 space1right">
+    <ul>
+      <li>
+        <label for="elasticity">elasticity</label>
+        <input id="elasticity" type="range" min="0" max="100" value="97" data-units="%" />
+      </li>
+      <li>
+        <label for="responsiveness">responsiveness</label>
+        <input id="responsiveness" type="range" min="0" max="100" value="6" data-units="%" />
+      </li>
+      <li>
+        <label for="displacement-radius">displacement radius</label>
+        <input id="displacement-radius" type="range" min="0" max="1000" value="400" data-units="px" />
+      </li>
+      <li>
+        <label for="displacement-intensity">displacement intensity</label>
+        <input id="displacement-intensity" type="range" min="-100" max="100" value="-12" data-units="%" />
+      </li>
+      <li>
+        <label for="node-count"># of nodes (approx.)</label>
+        <input id="node-count" type="range" min="100" max="2000" value="550" />
+      </li>
+      <li>
+        <label for="render-grid">grid</label>
+        <input id="render-grid" type="checkbox" checked />
+      </li>
+      <li>
+        <label for="render-dots">dots</label>
+        <input id="render-dots" type="checkbox" />
+      </li>
+    </ul>
+  </div>
+  
+  <script src="undulate-graphene.js"></script>
+
+</body>
+</html>
