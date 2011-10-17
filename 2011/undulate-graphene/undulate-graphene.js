@@ -1,4 +1,6 @@
 (function(){
+
+  'use strict';
   
   var HALF_ROOT_3 = Math.sqrt(3) / 2,
       isTouch = !!('createTouch' in document),
@@ -112,17 +114,17 @@
 
     if ( this.parent.isRenderingGrid ) {
       
-      // node on right
-      this.renderLineToNode( this.parent.nodes[ this.row ][ this.col + 1 ] );
+      // node on left
+      if ( this.i % 2 === this.row % 2 ) {
+        this.renderLineToNode( this.parent.nodes[ this.row ][ this.i + 1 ] );
+      }
     
       var nextNodeRow = this.parent.nodes[ this.row + 1 ],
           colShiftA = this.row % 2 ? 0 : -1,
           colShiftB = this.row % 2 ? 1 : 0;
       if ( nextNodeRow ) {
-        // diagonal down/left
-        this.renderLineToNode( nextNodeRow[ this.col + colShiftA ] );
-        // diagonal down/right
-        this.renderLineToNode( nextNodeRow[ this.col + colShiftB ] );
+        // diagonal down
+        this.renderLineToNode( nextNodeRow[ this.i ] );
       }
     }
     
@@ -189,7 +191,7 @@
     var verticalPadding = 100;
     
     // set size
-    this.width = this.canvas.width = window.innerWidth;
+    this.width = this.canvas.width = window.innerWidth - 20;
     this.height = this.canvas.height = window.innerHeight + verticalPadding * 2;
     
     var netHeight = this.height - verticalPadding * 2;
@@ -207,27 +209,33 @@
         yAdjust = ( netHeight % ( this.spacing * HALF_ROOT_3 ) ) / 2 + 100,
         origin,
         y, x, row, col, rowAdjust, node,
-        rowNodes;
+        rowNodes, index;
     
     var ctx = this.context;
     
     for ( row = 0; row < this.rows; row++ ) {
       this.nodes[row] = [];
       y = row * this.spacing * HALF_ROOT_3 + yAdjust;
+      index = 0;
       for ( col = 0; col < this.cols; col++ ) {
         rowAdjust = (row % 2) * 0.5;
         origin = {
           x : (col + rowAdjust) * this.spacing + xAdjust,
           'y' : y
         };
-        node = new UndulateNode({
-          parent : this,
-          'origin' : origin,
-          'row' : row,
-          'col' : col
-        });
         
-        this.nodes[row].push( node );
+        // node for every 2nd, & 3rd col, switches each row
+        if ( col % 3 !== row % 2 ) {
+          node = new UndulateNode({
+            parent : this,
+            'origin' : origin,
+            'row' : row,
+            'col' : col,
+            'i': index
+          });
+          index++;
+          this.nodes[row].push( node );
+        }
       }
     }
   };
@@ -235,21 +243,24 @@
   UndulateNet.prototype.animate = function() {
     
     var ctx = this.context,
-        node, row, col;
+        node, row, col,
+        rowNodes, len, i;
     
     ctx.clearRect( 0, 0, this.width, this.height );
 
     for ( row = 0; row < this.rows; row++ ) {
-      for ( col = 0; col < this.cols; col++ ) {
-        node = this.nodes[row][col];
-        node.update();
+      rowNodes = this.nodes[row];
+      len = rowNodes.length;
+      for ( i = 0; i < len; i++ ) {
+        rowNodes[i].update();
       }
     }
 
     for ( row = 0; row < this.rows; row++ ) {
-      for ( col = 0; col < this.cols; col++ ) {
-        node = this.nodes[row][col];
-        node.render();
+      rowNodes = this.nodes[row];
+      len = rowNodes.length;
+      for ( i = 0; i < len; i++ ) {
+        rowNodes[i].render();
       }
     }
     
@@ -313,7 +324,7 @@
       displacementRadius: 400,
       displacementIntensity: -0.12,
       isRenderingGrid: true,
-      isRenderingDots: false
+      isRenderingDots: true
     });
     
     // add range displays
