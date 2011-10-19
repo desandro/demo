@@ -20,7 +20,6 @@
                 };
       })();
   
-  
   /* ==================== EventHandler ==================== */
 
   function EventHandler() {}
@@ -108,7 +107,7 @@
   
   UndulateNode.prototype.render = function() {
     var ctx = this.parent.context;
-    // ctx.lineWidth = 5;
+    // ctx.lineWidth = 4;
     
     // ctx.strokeStyle = 'white';
 
@@ -130,8 +129,11 @@
     
     // ctx.fillStyle = 'white';
     if ( this.parent.isRenderingDots ) {
+      var d = Math.sqrt( this.offsetX * this.offsetX + this.offsetY * this.offsetY ),
+          // radius = Math.max( 0, 16 - d * 0.15);
+          radius = Math.max( 0, d * 0.1 + 4);
       ctx.beginPath();
-      ctx.arc( this.x, this.y, 5, 0, Math.PI*2, false );
+      ctx.arc( this.x, this.y, radius, 0, Math.PI*2, false );
       ctx.fill();
     }
     
@@ -143,7 +145,11 @@
       return;
     }
     
-    var ctx = this.parent.context;
+    var ctx = this.parent.context,
+        dx = node.x - this.x,
+        dy = node.y - this.y,
+        d = Math.sqrt( dx * dx + dy * dy );
+    ctx.lineWidth = Math.max( 1, d * -0.4 + 20 );
     ctx.beginPath();
     ctx.moveTo( this.x, this.y );
     ctx.lineTo( node.x, node.y );
