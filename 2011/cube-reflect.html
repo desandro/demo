@@ -28,14 +28,17 @@
       height: 100%;
       position: absolute;
       -webkit-transform-style: preserve-3d;
-      -webkit-transition: -webkit-transform 1s;
-      -webkit-transform: rotateY(1deg);
-/*      -webkit-animation: spinCube 12s linear infinite;*/
+    }
+    
+    #cube.rotated { -webkit-transform: rotateY(1deg); }
+    
+    #cube.animating {
+      -webkit-animation: spinCube 12s linear infinite;
     }
     
     @-webkit-keyframes spinCube {
-      from { -webkit-transform: translate3d(0, 0, -100px) rotateY(  0deg); }
-        to { -webkit-transform: translate3d(0, 0, -100px) rotateY(360deg); }
+      from { -webkit-transform: rotateY(  0deg); }
+        to { -webkit-transform: rotateY(360deg); }
     }
     
     #cube figure {
@@ -54,8 +57,8 @@
       -webkit-backface-visibility: hidden;
     }
     
-    #cube figure {
-    }
+    #cube.no-reflect figure { -webkit-box-reflect: none; }
+    
     
     #cube .front  { background: hsla(   0, 100%, 50%, 1 ); }
     #cube .back   { background: hsla(  60, 100%, 50%, 1 ); }
@@ -71,10 +74,16 @@
     #cube .top    { -webkit-transform: rotateX(   90deg ) translateZ( -100px ); }
     #cube .bottom { -webkit-transform: rotateX(  -90deg ) translateZ( -100px ); }
     
-    #cube.floor-hidden .top { display: none; }
-    
     #cube .top {
       -webkit-box-reflect: none;
+    }
+    
+    #options {
+      padding: 5px;
+      position: relative;
+      z-index: 2;
+      background: hsla( 0, 0%, 100%, 0.7 );
+      width: 250px;
     }
     
   </style>
@@ -85,7 +94,7 @@
   <h1>Cube reflect</h1>
 
   <section id="container">
-    <div id="cube">
+    <div id="cube" class="rotated">
       <figure class="front">1</figure>
       <figure class="back">2</figure>
       <figure class="right">3</figure>
@@ -98,8 +107,9 @@
   <section id="options">
     
     <p>
-      <button id="floor-toggler">Toggle floor</button>
-      <button id="overflow-toggler">Toggle overflow</button>
+      <button id="rotation-toggler">Toggle rotation</button>
+      <button id="reflection-toggler">Toggle reflection</button>
+      <button id="animation-toggler">Toggle animation</button>
     </p>
     
 
@@ -109,18 +119,32 @@
     window.onload = function() {
       var container = document.getElementById('container'),
           cube = document.getElementById('cube'),
-          isFloorVisible = true,
-          isOverflowing = true;
-        
-      document.getElementById('floor-toggler').addEventListener( 'click', function(){
-        isFloorVisible = !isFloorVisible;
-        cube.className = isFloorVisible ? '' : 'floor-hidden';
+          isRotated = true,
+          isAnimating = false,
+          isReflecting = true;
+      
+      function updateCubeClass() {
+        cube.className = ( isReflecting ? ' ' : 'no-reflect ' ) + 
+          ( isAnimating ? 'animating ' : ' ' ) + 
+          ( isRotated ? 'rotated ' : ' ' );
+      }
+      
+      document.getElementById('reflection-toggler').addEventListener( 'click', function(){
+        isReflecting = !isReflecting;
+        updateCubeClass();
       }, false);
         
-      document.getElementById('overflow-toggler').addEventListener( 'click', function(){
-        isOverflowing = !isOverflowing;
-        container.className = isOverflowing ? '' : 'no-overflow';
+      document.getElementById('animation-toggler').addEventListener( 'click', function(){
+        isAnimating = !isAnimating;
+        updateCubeClass();
       }, false);
+
+      document.getElementById('rotation-toggler').addEventListener( 'click', function(){
+        isRotated = !isRotated;
+        updateCubeClass();
+      }, false);
+      
+      
         
     };
   </script>
