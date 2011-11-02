@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  <title>subpixel type rendering - jsFiddle demo by desandro</title>
+  
+  <style type='text/css'>
+    body {
+  font-family: sans-serif;
+  padding: 1.0em;
+}
+
+i { font-style: italic; }
+
+.ex {
+  background: white;
+  margin-bottom: 1.0em;
+  border: 1px solid #159;
+  padding: 0.5em;
+}
+
+.alpha {
+  -webkit-transform: translate3d(0.5px, 0, 0);
+     -moz-transform: translate3d(0.5px, 0, 0);
+      -ms-transform: translate3d(0.5px, 0, 0);
+       -o-transform: translate3d(0.5px, 0, 0);
+          transform: translate3d(0.5px, 0, 0);
+}
+
+.beta {
+  -webkit-transform: translate3d(0, 0.5px, 0);
+     -moz-transform: translate3d(0, 0.5px, 0);
+      -ms-transform: translate3d(0, 0.5px, 0);
+       -o-transform: translate3d(0, 0.5px, 0);
+          transform: translate3d(0, 0.5px, 0);
+}
+
+.gamma {
+  -webkit-transform: translateX(0.5px);
+     -moz-transform: translateX(0.5px);
+      -ms-transform: translateX(0.5px);
+       -o-transform: translateX(0.5px);
+          transform: translateX(0.5px);
+}
+
+.delta {
+  -webkit-transform: translateY(0.5px);
+     -moz-transform: translateY(0.5px);
+      -ms-transform: translateY(0.5px);
+       -o-transform: translateY(0.5px);
+          transform: translateY(0.5px);
+}
+
+.epsilon {
+  -webkit-transform: translate(0.5px, 0.5px);
+     -moz-transform: translate(0.5px, 0.5px);
+      -ms-transform: translate(0.5px, 0.5px);
+       -o-transform: translate(0.5px, 0.5px);
+          transform: translate(0.5px, 0.5px);
+}
+
+.zeta {
+  -webkit-transform: translate3d(0.25px, 0, 0);
+     -moz-transform: translate3d(0.25px, 0, 0);
+      -ms-transform: translate3d(0.25px, 0, 0);
+       -o-transform: translate3d(0.25px, 0, 0);
+          transform: translate3d(0.25px, 0, 0);
+}
+
+.ex:hover {
+  border-color: green;
+  -webkit-transform: none;
+     -moz-transform: none;
+      -ms-transform: none;
+       -o-transform: none;
+          transform: none;
+}
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+window.addEvent('load', function() {
+
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div class="ex alpha">
+  <p><i>translate3d( 0.5px, 0px, 0)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+<div class="ex beta">
+  <p><i>translate3d( 0px, 0.5px, 0)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+<div class="ex gamma">
+  <p><i>translateX(0.5px)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+<div class="ex delta">
+  <p><i>translateY(0.5px)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+<div class="ex gamma">
+  <p><i>translate(0.5px, 0.5px)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+<div class="ex zeta">
+  <p><i>translate3d(0.25px, 0, 0)</i> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</div>
+
+</body>
+
+
+</html>
+
