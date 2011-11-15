@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>dial knob</title>
+
+  <style media="screen">
+    body { font-family: sans-serif; }
+  
+    #knob {
+      border: 5px solid;
+      background: #39D;
+      width: 90px;
+      height: 90px;
+      border-radius: 0 50px 50px 50px;
+      margin: 20px auto;
+      -webkit-transform: rotate(45deg);
+         -moz-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+           -o-transform: rotate(45deg);
+              transform: rotate(45deg);
+    }
+    
+    .active #knob { background: #3D9; }
+    
+    #knob:hover { cursor: move; }
+  </style>
+
+</head>
+<body>
+
+  <h1>dial knob</h1>
+  
+  <div id="knob"></div>
+  
+<script>
+  function init() {
+    var knob = document.getElementById('knob'),
+        knobPos,
+        startAngle,
+        knobAngle = Math.PI / 4,
+        transformProps = 'transform MozTransform WebkitTransform OTransform MsTransform'.split(' '),
+        transformProp;
+    
+    // get transformProp
+    for (var i=0, len = transformProps.length; i < len; i++) {
+      transformProp = transformProps[i];
+      if ( typeof document.documentElement.style[ transformProp ] === 'string' ) {
+        break;
+      }
+    }
+    
+    // back out if transform is not supported
+    if ( !transformProp ) {
+      return;
+    }
+    
+    function radToDeg( angle ) {
+      return ~~(angle / (Math.PI) * 180)
+    }
+
+    function angleFromKnob( event ) {
+      return Math.atan2( event.pageY - knobCenter.y, event.pageX - knobCenter.x );
+    }
+    
+    function handleMouseDown( event ) {
+      knobCenter = {
+        x: knob.offsetLeft + knob.offsetWidth / 2,
+        y: knob.offsetTop + knob.offsetHeight / 2
+      }
+      startAngle = knobAngle - angleFromKnob( event );
+      
+      document.body.className = 'active';
+      window.addEventListener( 'mousemove', handleMouseMove, false );
+      window.addEventListener( 'mouseup', handleMouseUp, false );
+      
+      event.preventDefault();
+    }
+    
+    function handleMouseMove( event ) {
+      knobAngle = angleFromKnob( event ) + startAngle;
+      knob.style[ transformProp ] = 'rotate(' + knobAngle + 'rad)';
+    }
+    
+    function handleMouseUp( event ) {
+      document.body.className = '';
+      
+      window.removeEventListener( 'mousemove', handleMouseMove, false );
+      window.removeEventListener( 'mouseup', handleMouseUp, false );
+    }
+    
+    knob.addEventListener( 'mousedown', handleMouseDown, false );
+    
+  }
+
+
+  window.addEventListener( 'load', init, false);
+
+</script>
+
+</body>
+</html>
